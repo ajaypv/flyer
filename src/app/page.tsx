@@ -7,10 +7,12 @@ import { z } from "zod";
 import {
   defaultMyCompProps,
   CompositionProps,
-  DURATION_IN_FRAMES,
   VIDEO_FPS,
   VIDEO_HEIGHT,
   VIDEO_WIDTH,
+  TextAnimationStyleType,
+  BackgroundStyleType,
+  calculateDuration,
 } from "../../types/constants";
 import { RenderControls } from "../components/RenderControls";
 import { Spacing } from "../components/Spacing";
@@ -19,12 +21,25 @@ import { Main } from "../remotion/MyComp/Main";
 
 const Home: NextPage = () => {
   const [text, setText] = useState<string>(defaultMyCompProps.title);
+  const [textAnimation, setTextAnimation] = useState<TextAnimationStyleType>(
+    defaultMyCompProps.textAnimation
+  );
+  const [background, setBackground] = useState<BackgroundStyleType>(
+    defaultMyCompProps.background
+  );
 
   const inputProps: z.infer<typeof CompositionProps> = useMemo(() => {
     return {
       title: text,
+      textAnimation,
+      background,
     };
-  }, [text]);
+  }, [text, textAnimation, background]);
+
+  // Calculate dynamic duration based on text length and animation type
+  const durationInFrames = useMemo(() => {
+    return calculateDuration(text, textAnimation);
+  }, [text, textAnimation]);
 
   return (
     <div>
@@ -33,13 +48,11 @@ const Home: NextPage = () => {
           <Player
             component={Main}
             inputProps={inputProps}
-            durationInFrames={DURATION_IN_FRAMES}
+            durationInFrames={durationInFrames}
             fps={VIDEO_FPS}
             compositionHeight={VIDEO_HEIGHT}
             compositionWidth={VIDEO_WIDTH}
             style={{
-              // Can't use tailwind class for width since player's default styles take presedence over tailwind's,
-              // but not over inline styles
               width: "100%",
             }}
             controls
@@ -50,13 +63,18 @@ const Home: NextPage = () => {
         <RenderControls
           text={text}
           setText={setText}
+          textAnimation={textAnimation}
+          setTextAnimation={setTextAnimation}
+          background={background}
+          setBackground={setBackground}
           inputProps={inputProps}
-        ></RenderControls>
-        <Spacing></Spacing>
-        <Spacing></Spacing>
-        <Spacing></Spacing>
-        <Spacing></Spacing>
-        <Tips></Tips>
+          durationInFrames={durationInFrames}
+        />
+        <Spacing />
+        <Spacing />
+        <Spacing />
+        <Spacing />
+        <Tips />
       </div>
     </div>
   );
