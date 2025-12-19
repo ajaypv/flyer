@@ -9,16 +9,33 @@ import { ProgressBar } from "./ProgressBar";
 import { Spacing } from "./Spacing";
 import { AnimationStyleSelector } from "./AnimationStyleSelector";
 import { BackgroundSelector } from "./BackgroundSelector";
+import { PlatformThemeSelector } from "./PlatformThemeSelector";
+import { DisplayModeSelector } from "./DisplayModeSelector";
+import { ConversationEditor } from "./ConversationEditor";
+import { VideoFormatSelector } from "./VideoFormatSelector";
 import {
   COMP_NAME,
+  MESSAGE_COMP_NAME,
   CompositionProps,
+  MessageConversationProps,
   TextAnimationStyleType,
   BackgroundStyleType,
+  VideoModeType,
+  VideoFormatType,
+  VIDEO_FORMAT_CONFIGS,
+  PlatformThemeType,
+  DisplayModeType,
+  MessageType,
   VIDEO_FPS,
 } from "../../types/constants";
 import { useRendering } from "../helpers/use-rendering";
 
 export const RenderControls: React.FC<{
+  videoMode: VideoModeType;
+  // Video format props
+  videoFormat: VideoFormatType;
+  setVideoFormat: React.Dispatch<React.SetStateAction<VideoFormatType>>;
+  // Text mode props
   text: string;
   setText: React.Dispatch<React.SetStateAction<string>>;
   textAnimation: TextAnimationStyleType;
@@ -26,8 +43,24 @@ export const RenderControls: React.FC<{
   background: BackgroundStyleType;
   setBackground: React.Dispatch<React.SetStateAction<BackgroundStyleType>>;
   inputProps: z.infer<typeof CompositionProps>;
+  // Message mode props
+  senderName: string;
+  setSenderName: React.Dispatch<React.SetStateAction<string>>;
+  receiverName: string;
+  setReceiverName: React.Dispatch<React.SetStateAction<string>>;
+  messages: MessageType[];
+  setMessages: React.Dispatch<React.SetStateAction<MessageType[]>>;
+  platformTheme: PlatformThemeType;
+  setPlatformTheme: React.Dispatch<React.SetStateAction<PlatformThemeType>>;
+  displayMode: DisplayModeType;
+  setDisplayMode: React.Dispatch<React.SetStateAction<DisplayModeType>>;
+  messageInputProps: z.infer<typeof MessageConversationProps>;
+  // Common props
   durationInFrames: number;
 }> = ({
+  videoMode,
+  videoFormat,
+  setVideoFormat,
   text,
   setText,
   textAnimation,
@@ -35,13 +68,31 @@ export const RenderControls: React.FC<{
   background,
   setBackground,
   inputProps,
+  senderName,
+  setSenderName,
+  receiverName,
+  setReceiverName,
+  messages,
+  setMessages,
+  platformTheme,
+  setPlatformTheme,
+  displayMode,
+  setDisplayMode,
+  messageInputProps,
   durationInFrames,
 }) => {
-  const { renderMedia, state, undo } = useRendering(COMP_NAME, inputProps);
+  // Use appropriate composition based on mode
+  const compName = videoMode === "text" ? COMP_NAME : MESSAGE_COMP_NAME;
+  const compProps = videoMode === "text" ? inputProps : messageInputProps;
+
+  const { renderMedia, state, undo } = useRendering(compName, compProps);
   const isDisabled = state.status === "invoking";
 
   // Calculate estimated video duration in seconds
   const estimatedDuration = Math.round(durationInFrames / VIDEO_FPS);
+
+  // Get format info for display
+  const formatConfig = VIDEO_FORMAT_CONFIGS[videoFormat];
 
   return (
     <InputContainer>
@@ -49,25 +100,60 @@ export const RenderControls: React.FC<{
       state.status === "invoking" ||
       state.status === "error" ? (
         <>
-          <Input disabled={isDisabled} setText={setText} text={text} />
-          <Spacing />
-          <AnimationStyleSelector
-            value={textAnimation}
-            onChange={setTextAnimation}
+          {/* Video Format Selector - shown for both modes */}
+          <VideoFormatSelector
+            value={videoFormat}
+            onChange={setVideoFormat}
             disabled={isDisabled}
           />
-          <BackgroundSelector
-            value={background}
-            onChange={setBackground}
-            disabled={isDisabled}
-          />
+
+          {videoMode === "text" ? (
+            // Text mode controls
+            <>
+              <Input disabled={isDisabled} setText={setText} text={text} />
+              <Spacing />
+              <AnimationStyleSelector
+                value={textAnimation}
+                onChange={setTextAnimation}
+                disabled={isDisabled}
+              />
+              <BackgroundSelector
+                value={background}
+                onChange={setBackground}
+                disabled={isDisabled}
+              />
+            </>
+          ) : (
+            // Message conversation controls
+            <>
+              <PlatformThemeSelector
+                value={platformTheme}
+                onChange={setPlatformTheme}
+                disabled={isDisabled}
+              />
+              <DisplayModeSelector
+                value={displayMode}
+                onChange={setDisplayMode}
+                disabled={isDisabled}
+              />
+              <ConversationEditor
+                senderName={senderName}
+                setSenderName={setSenderName}
+                receiverName={receiverName}
+                setReceiverName={setReceiverName}
+                messages={messages}
+                setMessages={setMessages}
+                disabled={isDisabled}
+              />
+            </>
+          )}
           <div className="text-sm text-subtitle mb-2">
-            Estimated duration: {estimatedDuration}s
+            {formatConfig.width}x{formatConfig.height} • {estimatedDuration}s
           </div>
           <Spacing />
           <AlignEnd>
             <Button
-              disabled={isDisabled}
+              disabled={isDisabled || (videoMode === "message" && messages.length === 0)}
               loading={isDisabled}
               onClick={renderMedia}
             >

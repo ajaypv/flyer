@@ -1,30 +1,43 @@
 import React from "react";
 import { BackgroundStyleType } from "../../types/constants";
 
-const options: { value: BackgroundStyleType; label: string; preview: React.CSSProperties }[] = [
-  { 
-    value: "black", 
-    label: "Black", 
-    preview: { backgroundColor: "#000000" } 
+const options: {
+  value: BackgroundStyleType;
+  label: string;
+  preview: React.CSSProperties;
+}[] = [
+  {
+    value: "black",
+    label: "Black",
+    preview: { backgroundColor: "#000000" },
   },
-  { 
-    value: "white", 
-    label: "White", 
-    preview: { backgroundColor: "#FFFFFF", border: "1px solid #eaeaea" } 
+  {
+    value: "white",
+    label: "White",
+    preview: { backgroundColor: "#FFFFFF", border: "1px solid #eaeaea" },
   },
-  { 
-    value: "shooting-stars", 
-    label: "Stars", 
-    preview: { 
+  {
+    value: "shooting-stars",
+    label: "Stars",
+    preview: {
       background: "linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0a0a0f 100%)",
-    } 
+    },
   },
-  { 
-    value: "ice-galaxy", 
-    label: "Galaxy", 
-    preview: { 
+  {
+    value: "ice-galaxy",
+    label: "Galaxy",
+    preview: {
       background: "linear-gradient(135deg, #1a1a2e 0%, #533483 50%, #0f3460 100%)",
-    } 
+    },
+  },
+  {
+    value: "hyperspeed",
+    label: "Hyperspeed",
+    preview: {
+      background:
+        "linear-gradient(180deg, #080808 0%, #0a0a0a 50%, #080808 100%), linear-gradient(90deg, #D856BF 20%, transparent 20%, transparent 80%, #03B3C3 80%)",
+      backgroundBlendMode: "overlay",
+    },
   },
 ];
 
@@ -38,7 +51,7 @@ export const BackgroundSelector: React.FC<{
       <label className="block text-sm font-medium text-foreground mb-2">
         Background
       </label>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-5 gap-2">
         {options.map((option) => (
           <button
             key={option.value}

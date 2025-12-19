@@ -3,9 +3,7 @@ import type { RenderMediaOnLambdaOutput } from "@remotion/lambda/client";
 import {
   ProgressRequest,
   ProgressResponse,
-  RenderRequest,
 } from "../../types/schema";
-import { CompositionProps } from "../../types/constants";
 import { ApiResponse } from "../helpers/api-response";
 
 const makeRequest = async <Res>(
@@ -27,14 +25,14 @@ const makeRequest = async <Res>(
   return json.data;
 };
 
-export const renderVideo = async ({
+export const renderVideo = async <T extends Record<string, unknown>>({
   id,
   inputProps,
 }: {
   id: string;
-  inputProps: z.infer<typeof CompositionProps>;
+  inputProps: T;
 }) => {
-  const body: z.infer<typeof RenderRequest> = {
+  const body = {
     id,
     inputProps,
   };
