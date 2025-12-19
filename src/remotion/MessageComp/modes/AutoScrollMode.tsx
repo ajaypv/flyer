@@ -13,15 +13,25 @@ import { TypingIndicator } from "../TypingIndicator";
 interface AutoScrollModeProps {
   messages: MessageType[];
   senderName: string;
+  senderAvatarUrl?: string;
+  senderHandle?: string;
   receiverName: string;
+  receiverAvatarUrl?: string;
+  receiverHandle?: string;
   platformTheme: PlatformThemeType;
+  zoomLevel?: number;
 }
 
 export const AutoScrollMode: React.FC<AutoScrollModeProps> = ({
   messages,
   senderName,
+  senderAvatarUrl,
+  senderHandle,
   receiverName,
+  receiverAvatarUrl,
+  receiverHandle,
   platformTheme,
+  zoomLevel = 1.0,
 }) => {
   const frame = useCurrentFrame();
   const adjustedFrame = frame - MSG_INTRO_FRAMES;
@@ -29,12 +39,11 @@ export const AutoScrollMode: React.FC<AutoScrollModeProps> = ({
   const messageTimePerMessage = MSG_TYPING_DURATION_FRAMES + MSG_DISPLAY_FRAMES;
 
   // Calculate which messages should be visible
-  const visibleMessages: { message: MessageType; progress: number; showTyping: boolean }[] = [];
+  const visibleMessages: { message: MessageType; progress: number; showTyping: boolean; index: number }[] = [];
 
   messages.forEach((message, index) => {
     const messageStartFrame = index * messageTimePerMessage;
     const typingEndFrame = messageStartFrame + MSG_TYPING_DURATION_FRAMES;
-    const messageEndFrame = typingEndFrame + MSG_DISPLAY_FRAMES;
 
     if (adjustedFrame >= messageStartFrame) {
       const isTyping = adjustedFrame < typingEndFrame;
@@ -51,6 +60,7 @@ export const AutoScrollMode: React.FC<AutoScrollModeProps> = ({
         message,
         progress: messageProgress,
         showTyping: isTyping,
+        index,
       });
     }
   });
@@ -79,7 +89,7 @@ export const AutoScrollMode: React.FC<AutoScrollModeProps> = ({
           gap: 8,
         }}
       >
-        {visibleMessages.map(({ message, progress, showTyping }, index) => (
+        {visibleMessages.map(({ message, progress, showTyping, index }) => (
           <React.Fragment key={message.id}>
             {showTyping ? (
               <TypingIndicator
@@ -92,9 +102,15 @@ export const AutoScrollMode: React.FC<AutoScrollModeProps> = ({
               <MessageRenderer
                 message={message}
                 senderName={senderName}
+                senderAvatarUrl={senderAvatarUrl}
+                senderHandle={senderHandle}
                 receiverName={receiverName}
+                receiverAvatarUrl={receiverAvatarUrl}
+                receiverHandle={receiverHandle}
                 platformTheme={platformTheme}
                 animationProgress={progress}
+                messageIndex={index}
+                zoomLevel={zoomLevel}
               />
             )}
           </React.Fragment>

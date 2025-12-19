@@ -14,15 +14,25 @@ import { TypingIndicator } from "../TypingIndicator";
 interface PairedModeProps {
   messages: MessageType[];
   senderName: string;
+  senderAvatarUrl?: string;
+  senderHandle?: string;
   receiverName: string;
+  receiverAvatarUrl?: string;
+  receiverHandle?: string;
   platformTheme: PlatformThemeType;
+  zoomLevel?: number;
 }
 
 export const PairedMode: React.FC<PairedModeProps> = ({
   messages,
   senderName,
+  senderAvatarUrl,
+  senderHandle,
   receiverName,
+  receiverAvatarUrl,
+  receiverHandle,
   platformTheme,
+  zoomLevel = 1.0,
 }) => {
   const frame = useCurrentFrame();
   const adjustedFrame = frame - MSG_INTRO_FRAMES;
@@ -61,7 +71,6 @@ export const PairedMode: React.FC<PairedModeProps> = ({
   const isFirstTyping = frameInCurrentPair < firstTypingEnd;
   const isSecondTyping =
     secondMessage && frameInCurrentPair >= firstTypingEnd && frameInCurrentPair < secondTypingEnd;
-  const isDisplaying = frameInCurrentPair >= secondTypingEnd && frameInCurrentPair < displayEnd;
   const isFading = frameInCurrentPair >= displayEnd;
 
   // Calculate animation progress for messages
@@ -95,6 +104,10 @@ export const PairedMode: React.FC<PairedModeProps> = ({
       )
     : 1;
 
+  // Calculate message indices for the current pair
+  const firstMessageIndex = currentPairIndex * 2;
+  const secondMessageIndex = currentPairIndex * 2 + 1;
+
   return (
     <div
       style={{
@@ -120,9 +133,15 @@ export const PairedMode: React.FC<PairedModeProps> = ({
           <MessageRenderer
             message={firstMessage}
             senderName={senderName}
+            senderAvatarUrl={senderAvatarUrl}
+            senderHandle={senderHandle}
             receiverName={receiverName}
+            receiverAvatarUrl={receiverAvatarUrl}
+            receiverHandle={receiverHandle}
             platformTheme={platformTheme}
             animationProgress={firstMessageProgress}
+            messageIndex={firstMessageIndex}
+            zoomLevel={zoomLevel}
           />
         </div>
       )}
@@ -142,9 +161,16 @@ export const PairedMode: React.FC<PairedModeProps> = ({
               <MessageRenderer
                 message={secondMessage}
                 senderName={senderName}
+                senderAvatarUrl={senderAvatarUrl}
+                senderHandle={senderHandle}
                 receiverName={receiverName}
+                receiverAvatarUrl={receiverAvatarUrl}
+                receiverHandle={receiverHandle}
                 platformTheme={platformTheme}
                 animationProgress={secondMessageProgress}
+                messageIndex={secondMessageIndex}
+                isReply={true}
+                zoomLevel={zoomLevel}
               />
             </div>
           ) : null}

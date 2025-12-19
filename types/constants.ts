@@ -95,10 +95,15 @@ export const CompositionProps = z.object({
 // Message conversation composition props
 export const MessageConversationProps = z.object({
   senderName: z.string().default("Sender"),
+  senderAvatarUrl: z.string().optional(),
+  senderHandle: z.string().optional(),
   receiverName: z.string().default("Receiver"),
+  receiverAvatarUrl: z.string().optional(),
+  receiverHandle: z.string().optional(),
   messages: z.array(Message).default([]),
   platformTheme: PlatformTheme.default("imessage"),
   displayMode: DisplayMode.default("auto-scroll"),
+  zoomLevel: z.number().min(0.5).max(2.0).default(1.0),
 });
 
 export const defaultMyCompProps: z.infer<typeof CompositionProps> = {
@@ -108,14 +113,19 @@ export const defaultMyCompProps: z.infer<typeof CompositionProps> = {
 };
 
 export const defaultMessageConversationProps: z.infer<typeof MessageConversationProps> = {
-  senderName: "Alice",
-  receiverName: "Bob",
+  senderName: "Elon Musk",
+  senderAvatarUrl: "https://pbs.twimg.com/profile_images/1893803697185910784/Na5lOWi5_400x400.jpg",
+  senderHandle: "@elonmusk",
+  receiverName: "Mark Zuckerberg",
+  receiverAvatarUrl: "https://pbs.twimg.com/profile_images/1590968738358079488/IY9Gx6Ok_400x400.jpg",
+  receiverHandle: "@faborig",
   messages: [
     { id: "1", text: "Hey! How are you?", sender: "sender" },
     { id: "2", text: "I'm doing great, thanks!", sender: "receiver" },
   ],
   platformTheme: "imessage",
   displayMode: "auto-scroll",
+  zoomLevel: 1.0,
 };
 
 export const VIDEO_WIDTH = 1280;
@@ -191,3 +201,43 @@ export const calculateMessageDuration = (
 
 // Default duration for backward compatibility
 export const DURATION_IN_FRAMES = 200;
+
+// Default celebrity avatars for quick selection
+export interface DefaultAvatar {
+  name: string;
+  url: string;
+  handle: string;
+}
+
+export const DEFAULT_AVATARS: DefaultAvatar[] = [
+  {
+    name: "Elon Musk",
+    url: "https://pbs.twimg.com/profile_images/1893803697185910784/Na5lOWi5_400x400.jpg",
+    handle: "@elonmusk",
+  },
+  {
+    name: "Mark Zuckerberg",
+    url: "https://pbs.twimg.com/profile_images/1590968738358079488/IY9Gx6Ok_400x400.jpg",
+    handle: "@faborig",
+  },
+  {
+    name: "Bill Gates",
+    url: "https://pbs.twimg.com/profile_images/1674501931842482176/ga4OaPTn_400x400.jpg",
+    handle: "@BillGates",
+  },
+  {
+    name: "Jeff Bezos",
+    url: "https://pbs.twimg.com/profile_images/1746927278639517696/P3_b4nkd_400x400.jpg",
+    handle: "@JeffBezos",
+  },
+  {
+    name: "Sundar Pichai",
+    url: "https://pbs.twimg.com/profile_images/864282616597405701/M-FEJMZ0_400x400.jpg",
+    handle: "@sundarpichai",
+  },
+  {
+    name: "Tim Cook",
+    url: "https://pbs.twimg.com/profile_images/1535420431766671360/Pwq-1eJc_400x400.jpg",
+    handle: "@tim_cook",
+  },
+];

@@ -13,6 +13,10 @@ export interface ThemeConfig {
   messageAnimation: "slide-left" | "fade-scale" | "slide-up";
   usernameColor: string;
   timestampColor: string;
+  // Twitter/X specific
+  handleColor?: string;
+  linkColor?: string;
+  borderColor?: string;
 }
 
 export const themeConfigs: Record<PlatformThemeType, ThemeConfig> = {
@@ -57,6 +61,23 @@ export const themeConfigs: Record<PlatformThemeType, ThemeConfig> = {
     messageAnimation: "slide-up",
     usernameColor: "#8E8E93",
     timestampColor: "#8E8E93",
+  },
+  twitter: {
+    backgroundColor: "#000000",
+    senderBubbleColor: "transparent",
+    receiverBubbleColor: "transparent",
+    senderTextColor: "#E7E9EA",
+    receiverTextColor: "#E7E9EA",
+    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    fontSize: 15,
+    avatarStyle: "circle",
+    typingIndicatorColor: "#71767B",
+    messageAnimation: "fade-scale",
+    usernameColor: "#E7E9EA",
+    timestampColor: "#71767B",
+    handleColor: "#71767B",
+    linkColor: "#1D9BF0",
+    borderColor: "#2F3336",
   },
 };
 

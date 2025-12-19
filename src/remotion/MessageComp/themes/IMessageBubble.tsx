@@ -8,6 +8,7 @@ interface IMessageBubbleProps {
   senderName: string;
   receiverName: string;
   animationProgress: number;
+  zoomLevel?: number;
 }
 
 export const IMessageBubble: React.FC<IMessageBubbleProps> = ({
@@ -15,11 +16,12 @@ export const IMessageBubble: React.FC<IMessageBubbleProps> = ({
   senderName,
   receiverName,
   animationProgress,
+  zoomLevel = 1.0,
 }) => {
   const { width, height } = useVideoConfig();
   const theme = getResponsiveThemeConfig("imessage", width, height);
   const isSender = message.sender === "sender";
-  const scale = theme.scale;
+  const scale = theme.scale * zoomLevel;
 
   // Slide up animation with iOS-style easing
   const translateY = interpolate(animationProgress, [0, 1], [20 * scale, 0], {

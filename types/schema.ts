@@ -1,9 +1,10 @@
 import { z } from "zod";
-import { CompositionProps } from "./constants";
+import { CompositionProps, MessageConversationProps } from "./constants";
 
+// Accept either text mode props or message mode props
 export const RenderRequest = z.object({
   id: z.string(),
-  inputProps: CompositionProps,
+  inputProps: z.union([CompositionProps, MessageConversationProps]),
 });
 
 export const ProgressRequest = z.object({

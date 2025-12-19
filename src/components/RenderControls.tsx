@@ -13,6 +13,7 @@ import { PlatformThemeSelector } from "./PlatformThemeSelector";
 import { DisplayModeSelector } from "./DisplayModeSelector";
 import { ConversationEditor } from "./ConversationEditor";
 import { VideoFormatSelector } from "./VideoFormatSelector";
+import { ZoomLevelSelector } from "./ZoomLevelSelector";
 import {
   COMP_NAME,
   MESSAGE_COMP_NAME,
@@ -46,14 +47,24 @@ export const RenderControls: React.FC<{
   // Message mode props
   senderName: string;
   setSenderName: React.Dispatch<React.SetStateAction<string>>;
+  senderAvatarUrl: string;
+  setSenderAvatarUrl: React.Dispatch<React.SetStateAction<string>>;
+  senderHandle: string;
+  setSenderHandle: React.Dispatch<React.SetStateAction<string>>;
   receiverName: string;
   setReceiverName: React.Dispatch<React.SetStateAction<string>>;
+  receiverAvatarUrl: string;
+  setReceiverAvatarUrl: React.Dispatch<React.SetStateAction<string>>;
+  receiverHandle: string;
+  setReceiverHandle: React.Dispatch<React.SetStateAction<string>>;
   messages: MessageType[];
   setMessages: React.Dispatch<React.SetStateAction<MessageType[]>>;
   platformTheme: PlatformThemeType;
   setPlatformTheme: React.Dispatch<React.SetStateAction<PlatformThemeType>>;
   displayMode: DisplayModeType;
   setDisplayMode: React.Dispatch<React.SetStateAction<DisplayModeType>>;
+  zoomLevel: number;
+  setZoomLevel: React.Dispatch<React.SetStateAction<number>>;
   messageInputProps: z.infer<typeof MessageConversationProps>;
   // Common props
   durationInFrames: number;
@@ -70,14 +81,24 @@ export const RenderControls: React.FC<{
   inputProps,
   senderName,
   setSenderName,
+  senderAvatarUrl,
+  setSenderAvatarUrl,
+  senderHandle,
+  setSenderHandle,
   receiverName,
   setReceiverName,
+  receiverAvatarUrl,
+  setReceiverAvatarUrl,
+  receiverHandle,
+  setReceiverHandle,
   messages,
   setMessages,
   platformTheme,
   setPlatformTheme,
   displayMode,
   setDisplayMode,
+  zoomLevel,
+  setZoomLevel,
   messageInputProps,
   durationInFrames,
 }) => {
@@ -136,13 +157,27 @@ export const RenderControls: React.FC<{
                 onChange={setDisplayMode}
                 disabled={isDisabled}
               />
+              <ZoomLevelSelector
+                value={zoomLevel}
+                onChange={setZoomLevel}
+                disabled={isDisabled}
+              />
               <ConversationEditor
                 senderName={senderName}
                 setSenderName={setSenderName}
+                senderAvatarUrl={senderAvatarUrl}
+                setSenderAvatarUrl={setSenderAvatarUrl}
+                senderHandle={senderHandle}
+                setSenderHandle={setSenderHandle}
                 receiverName={receiverName}
                 setReceiverName={setReceiverName}
+                receiverAvatarUrl={receiverAvatarUrl}
+                setReceiverAvatarUrl={setReceiverAvatarUrl}
+                receiverHandle={receiverHandle}
+                setReceiverHandle={setReceiverHandle}
                 messages={messages}
                 setMessages={setMessages}
+                platformTheme={platformTheme}
                 disabled={isDisabled}
               />
             </>

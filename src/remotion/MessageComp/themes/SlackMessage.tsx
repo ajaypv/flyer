@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { interpolate, useVideoConfig } from "remotion";
 import { MessageType } from "../../../../types/constants";
 import { getResponsiveThemeConfig } from "../themeConfig";
@@ -6,20 +6,38 @@ import { getResponsiveThemeConfig } from "../themeConfig";
 interface SlackMessageProps {
   message: MessageType;
   senderName: string;
+  senderAvatarUrl?: string;
   receiverName: string;
+  receiverAvatarUrl?: string;
   animationProgress: number;
+  zoomLevel?: number;
 }
+
+// Get initial from name for fallback avatar
+const getInitial = (name: string): string => {
+  if (!name || name.trim().length === 0) return "?";
+  const trimmed = name.trim();
+  const firstChar = trimmed.charAt(0);
+  return firstChar ? firstChar.toUpperCase() : "?";
+};
 
 export const SlackMessage: React.FC<SlackMessageProps> = ({
   message,
   senderName,
+  senderAvatarUrl,
   receiverName,
+  receiverAvatarUrl,
   animationProgress,
+  zoomLevel = 1.0,
 }) => {
   const { width, height } = useVideoConfig();
   const theme = getResponsiveThemeConfig("slack", width, height);
-  const scale = theme.scale;
-  const name = message.sender === "sender" ? senderName : receiverName;
+  const scale = theme.scale * zoomLevel;
+  const isSender = message.sender === "sender";
+  const name = isSender ? senderName : receiverName;
+  const avatarUrl = isSender ? senderAvatarUrl : receiverAvatarUrl;
+
+  const [imageError, setImageError] = useState(false);
 
   // Slide from left animation
   const translateX = interpolate(animationProgress, [0, 1], [-20 * scale, 0], {
@@ -29,8 +47,9 @@ export const SlackMessage: React.FC<SlackMessageProps> = ({
     extrapolateRight: "clamp",
   });
 
-  // Generate avatar color based on name
-  const avatarColor = message.sender === "sender" ? "#36C5F0" : "#2EB67D";
+  // Generate avatar color based on sender
+  const avatarColor = isSender ? "#36C5F0" : "#2EB67D";
+  const showFallback = !avatarUrl || imageError;
 
   return (
     <div
@@ -42,29 +61,44 @@ export const SlackMessage: React.FC<SlackMessageProps> = ({
         opacity,
       }}
     >
-      {/* Avatar */}
+      {/* Avatar - Slack uses rounded squares */}
       <div
         style={{
           width: 48 * scale,
           height: 48 * scale,
           borderRadius: 6 * scale,
-          backgroundColor: avatarColor,
+          backgroundColor: showFallback ? avatarColor : "transparent",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           flexShrink: 0,
+          overflow: "hidden",
         }}
       >
-        <span
-          style={{
-            color: "#fff",
-            fontSize: 22 * scale,
-            fontWeight: 700,
-            fontFamily: theme.fontFamily,
-          }}
-        >
-          {name.charAt(0).toUpperCase()}
-        </span>
+        {showFallback ? (
+          <span
+            style={{
+              color: "#fff",
+              fontSize: 22 * scale,
+              fontWeight: 700,
+              fontFamily: theme.fontFamily,
+            }}
+          >
+            {getInitial(name)}
+          </span>
+        ) : (
+          <img
+            src={avatarUrl}
+            alt={name}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              borderRadius: 6 * scale,
+            }}
+            onError={() => setImageError(true)}
+          />
+        )}
       </div>
 
       {/* Message content */}

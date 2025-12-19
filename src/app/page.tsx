@@ -48,8 +48,20 @@ const Home: NextPage = () => {
   const [senderName, setSenderName] = useState<string>(
     defaultMessageConversationProps.senderName
   );
+  const [senderAvatarUrl, setSenderAvatarUrl] = useState<string>(
+    defaultMessageConversationProps.senderAvatarUrl || ""
+  );
+  const [senderHandle, setSenderHandle] = useState<string>(
+    defaultMessageConversationProps.senderHandle || "@user"
+  );
   const [receiverName, setReceiverName] = useState<string>(
     defaultMessageConversationProps.receiverName
+  );
+  const [receiverAvatarUrl, setReceiverAvatarUrl] = useState<string>(
+    defaultMessageConversationProps.receiverAvatarUrl || ""
+  );
+  const [receiverHandle, setReceiverHandle] = useState<string>(
+    defaultMessageConversationProps.receiverHandle || "@user"
   );
   const [messages, setMessages] = useState<MessageType[]>(
     defaultMessageConversationProps.messages
@@ -59,6 +71,9 @@ const Home: NextPage = () => {
   );
   const [displayMode, setDisplayMode] = useState<DisplayModeType>(
     defaultMessageConversationProps.displayMode
+  );
+  const [zoomLevel, setZoomLevel] = useState<number>(
+    defaultMessageConversationProps.zoomLevel
   );
 
   // Text mode input props
@@ -74,12 +89,28 @@ const Home: NextPage = () => {
   const messageInputProps: z.infer<typeof MessageConversationProps> = useMemo(() => {
     return {
       senderName,
+      senderAvatarUrl: senderAvatarUrl || undefined,
+      senderHandle: senderHandle || undefined,
       receiverName,
+      receiverAvatarUrl: receiverAvatarUrl || undefined,
+      receiverHandle: receiverHandle || undefined,
       messages,
       platformTheme,
       displayMode,
+      zoomLevel,
     };
-  }, [senderName, receiverName, messages, platformTheme, displayMode]);
+  }, [
+    senderName,
+    senderAvatarUrl,
+    senderHandle,
+    receiverName,
+    receiverAvatarUrl,
+    receiverHandle,
+    messages,
+    platformTheme,
+    displayMode,
+    zoomLevel,
+  ]);
 
   // Calculate dynamic duration based on mode
   const durationInFrames = useMemo(() => {
@@ -155,14 +186,24 @@ const Home: NextPage = () => {
           // Message mode props
           senderName={senderName}
           setSenderName={setSenderName}
+          senderAvatarUrl={senderAvatarUrl}
+          setSenderAvatarUrl={setSenderAvatarUrl}
+          senderHandle={senderHandle}
+          setSenderHandle={setSenderHandle}
           receiverName={receiverName}
           setReceiverName={setReceiverName}
+          receiverAvatarUrl={receiverAvatarUrl}
+          setReceiverAvatarUrl={setReceiverAvatarUrl}
+          receiverHandle={receiverHandle}
+          setReceiverHandle={setReceiverHandle}
           messages={messages}
           setMessages={setMessages}
           platformTheme={platformTheme}
           setPlatformTheme={setPlatformTheme}
           displayMode={displayMode}
           setDisplayMode={setDisplayMode}
+          zoomLevel={zoomLevel}
+          setZoomLevel={setZoomLevel}
           messageInputProps={messageInputProps}
           // Common props
           durationInFrames={durationInFrames}

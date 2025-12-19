@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { interpolate, useVideoConfig } from "remotion";
 import { MessageType } from "../../../../types/constants";
 import { getResponsiveThemeConfig } from "../themeConfig";
@@ -6,20 +6,38 @@ import { getResponsiveThemeConfig } from "../themeConfig";
 interface DiscordMessageProps {
   message: MessageType;
   senderName: string;
+  senderAvatarUrl?: string;
   receiverName: string;
+  receiverAvatarUrl?: string;
   animationProgress: number;
+  zoomLevel?: number;
 }
+
+// Get initial from name for fallback avatar
+const getInitial = (name: string): string => {
+  if (!name || name.trim().length === 0) return "?";
+  const trimmed = name.trim();
+  const firstChar = trimmed.charAt(0);
+  return firstChar ? firstChar.toUpperCase() : "?";
+};
 
 export const DiscordMessage: React.FC<DiscordMessageProps> = ({
   message,
   senderName,
+  senderAvatarUrl,
   receiverName,
+  receiverAvatarUrl,
   animationProgress,
+  zoomLevel = 1.0,
 }) => {
   const { width, height } = useVideoConfig();
   const theme = getResponsiveThemeConfig("discord", width, height);
-  const sizeScale = theme.scale;
-  const name = message.sender === "sender" ? senderName : receiverName;
+  const sizeScale = theme.scale * zoomLevel;
+  const isSender = message.sender === "sender";
+  const name = isSender ? senderName : receiverName;
+  const avatarUrl = isSender ? senderAvatarUrl : receiverAvatarUrl;
+
+  const [imageError, setImageError] = useState(false);
 
   // Fade + scale animation
   const animScale = interpolate(animationProgress, [0, 1], [0.95, 1], {
@@ -30,8 +48,9 @@ export const DiscordMessage: React.FC<DiscordMessageProps> = ({
   });
 
   // Discord-style username colors
-  const usernameColor = message.sender === "sender" ? "#f3b3ce" : "#7dd3fc";
-  const avatarColor = message.sender === "sender" ? "#5865F2" : "#57F287";
+  const usernameColor = isSender ? "#f3b3ce" : "#7dd3fc";
+  const avatarColor = isSender ? "#5865F2" : "#57F287";
+  const showFallback = !avatarUrl || imageError;
 
   return (
     <div
@@ -44,29 +63,43 @@ export const DiscordMessage: React.FC<DiscordMessageProps> = ({
         transformOrigin: "left center",
       }}
     >
-      {/* Avatar */}
+      {/* Avatar - Discord uses circles */}
       <div
         style={{
           width: 52 * sizeScale,
           height: 52 * sizeScale,
           borderRadius: "50%",
-          backgroundColor: avatarColor,
+          backgroundColor: showFallback ? avatarColor : "transparent",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           flexShrink: 0,
+          overflow: "hidden",
         }}
       >
-        <span
-          style={{
-            color: "#fff",
-            fontSize: 24 * sizeScale,
-            fontWeight: 600,
-            fontFamily: theme.fontFamily,
-          }}
-        >
-          {name.charAt(0).toUpperCase()}
-        </span>
+        {showFallback ? (
+          <span
+            style={{
+              color: "#fff",
+              fontSize: 24 * sizeScale,
+              fontWeight: 600,
+              fontFamily: theme.fontFamily,
+            }}
+          >
+            {getInitial(name)}
+          </span>
+        ) : (
+          <img
+            src={avatarUrl}
+            alt={name}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+            onError={() => setImageError(true)}
+          />
+        )}
       </div>
 
       {/* Message content */}

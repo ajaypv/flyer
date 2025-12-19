@@ -111,6 +111,63 @@ export const TypingIndicator: React.FC<TypingIndicatorProps> = ({
     );
   }
 
+  if (platformTheme === "twitter") {
+    // Twitter/X style: Subtle "Composing..." indicator
+    return (
+      <div
+        style={{
+          padding: `${12 * scale}px ${16 * scale}px`,
+          opacity,
+          display: "flex",
+          alignItems: "center",
+          gap: 8 * scale,
+          borderBottom: `1px solid ${theme.borderColor || "#2F3336"}`,
+        }}
+      >
+        <div
+          style={{
+            width: 48 * scale,
+            height: 48 * scale,
+            borderRadius: "50%",
+            backgroundColor: "#333639",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <span style={{ color: "#fff", fontSize: 20 * scale, fontWeight: 600 }}>
+            {name.charAt(0).toUpperCase()}
+          </span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 6 * scale }}>
+          <span
+            style={{
+              color: theme.typingIndicatorColor,
+              fontSize: 15 * scale,
+              fontFamily: theme.fontFamily,
+            }}
+          >
+            {name} is composing
+          </span>
+          <div style={{ display: "flex", gap: 3 * scale }}>
+            {[dot1Y, dot2Y, dot3Y].map((y, i) => (
+              <div
+                key={i}
+                style={{
+                  width: 5 * scale,
+                  height: 5 * scale,
+                  borderRadius: "50%",
+                  backgroundColor: theme.typingIndicatorColor,
+                  transform: `translateY(${y * 0.4}px)`,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Slack style: "[name] is typing..."
   return (
     <div

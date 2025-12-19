@@ -14,15 +14,25 @@ import { TypingIndicator } from "../TypingIndicator";
 interface OneAtATimeModeProps {
   messages: MessageType[];
   senderName: string;
+  senderAvatarUrl?: string;
+  senderHandle?: string;
   receiverName: string;
+  receiverAvatarUrl?: string;
+  receiverHandle?: string;
   platformTheme: PlatformThemeType;
+  zoomLevel?: number;
 }
 
 export const OneAtATimeMode: React.FC<OneAtATimeModeProps> = ({
   messages,
   senderName,
+  senderAvatarUrl,
+  senderHandle,
   receiverName,
+  receiverAvatarUrl,
+  receiverHandle,
   platformTheme,
+  zoomLevel = 1.0,
 }) => {
   const frame = useCurrentFrame();
   const adjustedFrame = frame - MSG_INTRO_FRAMES;
@@ -40,9 +50,6 @@ export const OneAtATimeMode: React.FC<OneAtATimeModeProps> = ({
 
   const currentMessage = messages[currentMessageIndex];
   const isTyping = frameInCurrentMessage < MSG_TYPING_DURATION_FRAMES;
-  const isDisplaying =
-    frameInCurrentMessage >= MSG_TYPING_DURATION_FRAMES &&
-    frameInCurrentMessage < MSG_TYPING_DURATION_FRAMES + MSG_DISPLAY_FRAMES;
   const isFading =
     frameInCurrentMessage >= MSG_TYPING_DURATION_FRAMES + MSG_DISPLAY_FRAMES;
 
@@ -93,9 +100,15 @@ export const OneAtATimeMode: React.FC<OneAtATimeModeProps> = ({
           <MessageRenderer
             message={currentMessage}
             senderName={senderName}
+            senderAvatarUrl={senderAvatarUrl}
+            senderHandle={senderHandle}
             receiverName={receiverName}
+            receiverAvatarUrl={receiverAvatarUrl}
+            receiverHandle={receiverHandle}
             platformTheme={platformTheme}
             animationProgress={messageProgress}
+            messageIndex={currentMessageIndex}
+            zoomLevel={zoomLevel}
           />
         </div>
       )}

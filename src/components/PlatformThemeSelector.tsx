@@ -7,7 +7,7 @@ interface PlatformThemeSelectorProps {
   disabled?: boolean;
 }
 
-const themes: { value: PlatformThemeType; label: string; colors: string[] }[] = [
+const themes: { value: PlatformThemeType; label: string; colors: string[]; icon?: string }[] = [
   {
     value: "slack",
     label: "Slack",
@@ -22,6 +22,12 @@ const themes: { value: PlatformThemeType; label: string; colors: string[] }[] = 
     value: "imessage",
     label: "iMessage",
     colors: ["#007AFF", "#3C3C3E", "#000000"],
+  },
+  {
+    value: "twitter",
+    label: "X / Twitter",
+    colors: ["#000000", "#1D9BF0", "#E7E9EA"],
+    icon: "X",
   },
 ];
 
