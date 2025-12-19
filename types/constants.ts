@@ -21,7 +21,7 @@ export const BackgroundStyle = z.enum([
 export type BackgroundStyleType = z.infer<typeof BackgroundStyle>;
 
 // Platform theme options for message conversation
-export const PlatformTheme = z.enum(["slack", "discord", "imessage"]);
+export const PlatformTheme = z.enum(["slack", "discord", "imessage", "twitter"]);
 export type PlatformThemeType = z.infer<typeof PlatformTheme>;
 
 // Display mode options for message conversation
