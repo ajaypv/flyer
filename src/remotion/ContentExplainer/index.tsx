@@ -67,6 +67,8 @@ export const ContentExplainer: React.FC<ContentExplainerProps> = ({
                 sectionTimings={sectionTimings}
                 globalVisualStyle={content.visualStyle}
                 colorScheme={content.colorScheme}
+                primaryColor={content.primaryColor}
+                accentColor={content.accentColor}
             />
         </AbsoluteFill>
     );

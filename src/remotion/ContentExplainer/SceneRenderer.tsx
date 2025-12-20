@@ -15,6 +15,7 @@ import { OutroScene } from "./scenes/OutroScene";
 import { ImageHeroScene } from "./scenes/ImageHeroScene";
 import { ComparisonScene } from "./scenes/ComparisonScene";
 import { QuoteScene } from "./scenes/QuoteScene";
+import { CodeScene } from "./scenes/CodeScene";
 
 // Effects
 import { CameraMotion } from "./effects/CameraMotion";
@@ -70,6 +71,8 @@ export const SceneRenderer: React.FC<SceneRendererProps> = ({
                 return <ComparisonScene {...commonProps} />;
             case "quote":
                 return <QuoteScene {...commonProps} />;
+            case "code":
+                return <CodeScene {...commonProps} />;
             case "outro":
                 return <OutroScene {...commonProps} />;
             default:

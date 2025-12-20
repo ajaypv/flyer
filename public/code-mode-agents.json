@@ -1,0 +1,194 @@
+{
+    "id": "code-mode-agents-v2",
+    "title": "The Future of AI Agents",
+    "type": "explainer",
+    "format": "portrait",
+    "background": "aurora",
+    "colorScheme": "dark",
+    "primaryColor": "#bf5af2",
+    "accentColor": "#5e5ce6",
+    "sections": [
+        {
+            "id": "hook",
+            "type": "intro",
+            "headline": "Your AI Agent\nis Burning Tokens",
+            "subheadline": "There's a better way",
+            "duration": 4,
+            "textAnimation": "fade",
+            "textPosition": "center",
+            "textAlign": "center"
+        },
+        {
+            "id": "traditional-approach",
+            "type": "headline",
+            "headline": "Traditional MCP",
+            "subheadline": "Direct function calling",
+            "duration": 3,
+            "textAnimation": "fade",
+            "textPosition": "top",
+            "backgroundOverride": "gradient-mesh"
+        },
+        {
+            "id": "problem-code",
+            "type": "code",
+            "headline": "The Problem",
+            "subheadline": "What's happening under the hood",
+            "bullets": [
+                "llm.call(tool_schema)",
+                "// Tool schemas bloat context",
+                "// Results flow through LLM",
+                "// Latency grows, costs spike"
+            ],
+            "duration": 6,
+            "backgroundOverride": "gradient-mesh"
+        },
+        {
+            "id": "solution-intro",
+            "type": "intro",
+            "headline": "Code Mode",
+            "subheadline": "The paradigm shift",
+            "duration": 3,
+            "textAnimation": "fade",
+            "textPosition": "center",
+            "textAlign": "center"
+        },
+        {
+            "id": "solution-code",
+            "type": "code",
+            "headline": "How It Works",
+            "subheadline": "Convert tools to TypeScript API",
+            "bullets": [
+                "const api = toTypescript(mcpTools)",
+                "const code = llm.generate(api)",
+                "const result = sandbox.run(code)",
+                "return result.final"
+            ],
+            "duration": 7
+        },
+        {
+            "id": "benefit-native",
+            "type": "headline",
+            "headline": "🧠 Native Skill",
+            "subheadline": "LLMs have seen millions of lines of code",
+            "body": "Code generation is highly reliable",
+            "duration": 4,
+            "textAnimation": "fade",
+            "textPosition": "bottom",
+            "backgroundOverride": "organic-blobs"
+        },
+        {
+            "id": "stats-tokens",
+            "type": "stats",
+            "stats": [
+                {
+                    "value": "98%",
+                    "label": "Token Savings"
+                },
+                {
+                    "value": "10ms",
+                    "label": "Startup Time"
+                }
+            ],
+            "duration": 4,
+            "textAnimation": "fade",
+            "backgroundOverride": "3d-grid"
+        },
+        {
+            "id": "v8-intro",
+            "type": "headline",
+            "headline": "⚡ V8 Isolates",
+            "subheadline": "Lightweight sandboxes",
+            "duration": 3,
+            "textAnimation": "fade",
+            "textPosition": "top",
+            "backgroundOverride": "hyperspeed"
+        },
+        {
+            "id": "v8-code",
+            "type": "code",
+            "headline": "Sandbox in Action",
+            "bullets": [
+                "const isolate = new V8Isolate()",
+                "isolate.run(userCode)",
+                "// No internet access",
+                "// Secrets in secure bindings",
+                "// Disposed after execution"
+            ],
+            "duration": 7,
+            "backgroundOverride": "hyperspeed"
+        },
+        {
+            "id": "cloudflare",
+            "type": "headline",
+            "headline": "Cloudflare Workers",
+            "subheadline": "Dynamic Worker Loader API",
+            "body": "Run untrusted code at the edge",
+            "duration": 4,
+            "textAnimation": "fade",
+            "textPosition": "left",
+            "backgroundOverride": "shooting-stars"
+        },
+        {
+            "id": "security-intro",
+            "type": "headline",
+            "headline": "🔐 Zero Leakage",
+            "subheadline": "Security without compromises",
+            "duration": 3,
+            "textAnimation": "fade",
+            "textPosition": "right",
+            "backgroundOverride": "ice-galaxy"
+        },
+        {
+            "id": "security-explain",
+            "type": "bullet_list",
+            "headline": "Secure by Design",
+            "bullets": [
+                "Secure bindings hold API keys",
+                "No general internet access",
+                "Agent cannot leak secrets"
+            ],
+            "duration": 5,
+            "textAnimation": "fade",
+            "textPosition": "left",
+            "backgroundOverride": "ice-galaxy"
+        },
+        {
+            "id": "mindset-shift",
+            "type": "quote",
+            "quote": "Stop treating your agent like a tool operator. Enable it as a software engineer.",
+            "duration": 5,
+            "textAnimation": "fade"
+        },
+        {
+            "id": "flyer-promo",
+            "type": "intro",
+            "headline": "This Video?\nGenerated from JSON",
+            "subheadline": "No editing required",
+            "duration": 4,
+            "textAnimation": "fade",
+            "backgroundOverride": "gradient-mesh"
+        },
+        {
+            "id": "flyer-code",
+            "type": "code",
+            "headline": "Just Write JSON",
+            "subheadline": "Flyer converts it to video",
+            "bullets": [
+                "{ \"type\": \"intro\",",
+                "  \"headline\": \"Your Text\" }",
+                "// Paste JSON → Get Video",
+                "// checkout the github repo"
+            ],
+            "duration": 6,
+            "backgroundOverride": "gradient-mesh"
+        },
+        {
+            "id": "outro",
+            "type": "outro",
+            "headline": "Build Smarter Agents",
+            "subheadline": "@tryflyer • #AIArchitecture",
+            "duration": 3,
+            "textAnimation": "fade"
+        }
+    ]
+}

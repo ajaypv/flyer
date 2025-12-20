@@ -1,8 +1,9 @@
 import React from "react";
-import { Sequence, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Sequence, useCurrentFrame } from "remotion";
 import { SectionValue, VisualStyleType } from "../../../types/video-content";
 import { SceneRenderer } from "./SceneRenderer";
 import { TransitionOverlay } from "./effects/TransitionOverlay";
+import { ContentBackgroundRenderer } from "./backgrounds/BackgroundRenderer";
 
 export interface SectionTiming {
     startFrame: number;
@@ -16,6 +17,8 @@ export interface SceneManagerProps {
     sectionTimings: SectionTiming[];
     globalVisualStyle?: VisualStyleType;
     colorScheme: "dark" | "light" | "brand";
+    primaryColor?: string;
+    accentColor?: string;
 }
 
 export const SceneManager: React.FC<SceneManagerProps> = ({
@@ -23,6 +26,8 @@ export const SceneManager: React.FC<SceneManagerProps> = ({
     sectionTimings,
     globalVisualStyle,
     colorScheme,
+    primaryColor,
+    accentColor,
 }) => {
     const frame = useCurrentFrame();
 
@@ -53,6 +58,24 @@ export const SceneManager: React.FC<SceneManagerProps> = ({
 
                 return (
                     <React.Fragment key={section.id}>
+                        {/* Section-specific Background (if backgroundOverride is set) */}
+                        {section.backgroundOverride && (
+                            <Sequence
+                                from={timing.startFrame}
+                                durationInFrames={timing.durationFrames}
+                                name={`Background: ${section.id}`}
+                            >
+                                <AbsoluteFill>
+                                    <ContentBackgroundRenderer
+                                        background={section.backgroundOverride}
+                                        colorScheme={colorScheme}
+                                        primaryColor={primaryColor}
+                                        accentColor={accentColor}
+                                    />
+                                </AbsoluteFill>
+                            </Sequence>
+                        )}
+
                         {/* Scene Content */}
                         <Sequence
                             from={timing.startFrame}
@@ -87,3 +110,4 @@ export const SceneManager: React.FC<SceneManagerProps> = ({
         </>
     );
 };
+

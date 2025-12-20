@@ -2,7 +2,7 @@
 
 import { Player } from "@remotion/player";
 import type { NextPage } from "next";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import {
   defaultMyCompProps,
@@ -51,6 +51,44 @@ const Home: NextPage = () => {
   // Explainer audio state
   const [audioTrackId, setAudioTrackId] = useState<AudioTrackId>("explainer");
   const [audioVolume, setAudioVolume] = useState<number>(0.3);
+
+  // Explainer background state
+  const [explainerBackground, setExplainerBackground] = useState<string>("aurora");
+
+  // Custom JSON input state
+  const [useCustomJson, setUseCustomJson] = useState<boolean>(false);
+  const [customJsonInput, setCustomJsonInput] = useState<string>("");
+  const [jsonError, setJsonError] = useState<string | null>(null);
+  const [parsedCustomContent, setParsedCustomContent] = useState<VideoContentInputType | null>(null);
+
+  // Parse custom JSON when input changes
+  useEffect(() => {
+    if (!customJsonInput.trim()) {
+      setParsedCustomContent(null);
+      setJsonError(null);
+      return;
+    }
+    try {
+      const parsed = JSON.parse(customJsonInput);
+      setParsedCustomContent(parsed as VideoContentInputType);
+      setJsonError(null);
+    } catch (e) {
+      setJsonError((e as Error).message);
+      setParsedCustomContent(null);
+    }
+  }, [customJsonInput]);
+
+  // Load sample JSON
+  const loadSampleJson = async () => {
+    try {
+      const response = await fetch("/sample-video.json");
+      const text = await response.text();
+      setCustomJsonInput(text);
+      setUseCustomJson(true);
+    } catch (e) {
+      console.error("Failed to load sample JSON:", e);
+    }
+  };
 
   // Text mode state
   const [text, setText] = useState<string>(defaultMyCompProps.title);
@@ -131,26 +169,36 @@ const Home: NextPage = () => {
 
   // Explainer mode input props - with dynamic format and audio
   const explainerInputProps = useMemo(() => {
+    // Use custom content if available, otherwise demo content
+    const baseContent = (useCustomJson && parsedCustomContent)
+      ? parsedCustomContent
+      : DEMO_LLM_EXPLAINER;
+
     return {
       content: {
-        ...DEMO_LLM_EXPLAINER,
+        ...baseContent,
         format: explainerFormat,
+        background: explainerBackground,
       },
       audioTrackId,
       audioVolume,
     };
-  }, [explainerFormat, audioTrackId, audioVolume]);
+  }, [explainerFormat, explainerBackground, audioTrackId, audioVolume, useCustomJson, parsedCustomContent]);
 
   // Calculate dynamic duration based on mode
   const durationInFrames = useMemo(() => {
     if (videoMode === "text") {
       return calculateDuration(text, textAnimation);
     } else if (videoMode === "explainer") {
-      return calculateTotalFrames(DEMO_LLM_EXPLAINER.sections);
+      // Use custom content sections if available
+      const contentSections = (useCustomJson && parsedCustomContent)
+        ? parsedCustomContent.sections
+        : DEMO_LLM_EXPLAINER.sections;
+      return calculateTotalFrames(contentSections);
     } else {
       return calculateMessageDuration(messages.length, displayMode);
     }
-  }, [videoMode, text, textAnimation, messages.length, displayMode]);
+  }, [videoMode, text, textAnimation, messages.length, displayMode, useCustomJson, parsedCustomContent]);
 
   // Get video dimensions based on mode
   const getVideoDimensions = () => {
@@ -280,6 +328,28 @@ const Home: NextPage = () => {
               </button>
             </div>
 
+            {/* Background Selector */}
+            <div className="mb-4">
+              <label className="text-gray-300 text-sm font-medium mb-2 block text-center">
+                🎨 Background Style
+              </label>
+              <select
+                value={explainerBackground}
+                onChange={(e) => setExplainerBackground(e.target.value)}
+                className="w-full bg-gray-700 text-white rounded-lg px-3 py-2 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="aurora">✨ Aurora (Apple Style)</option>
+                <option value="gradient-mesh">🌈 Gradient Mesh</option>
+                <option value="organic-blobs">🫧 Organic Blobs</option>
+                <option value="3d-grid">📐 3D Grid (Retro)</option>
+                <option value="shooting-stars">⭐ Shooting Stars</option>
+                <option value="ice-galaxy">❄️ Ice Galaxy</option>
+                <option value="hyperspeed">🚀 Hyperspeed</option>
+                <option value="solid-dark">⬛ Solid Dark</option>
+                <option value="solid-light">⬜ Solid Light</option>
+              </select>
+            </div>
+
             {/* Audio Track Selector */}
             <div className="border-t border-gray-700 pt-4 mt-2">
               <label className="text-gray-300 text-sm font-medium mb-2 block text-center">
@@ -317,11 +387,107 @@ const Home: NextPage = () => {
               )}
             </div>
 
-            <p className="text-gray-400 text-sm text-center mt-4">
-              6 sections • Minimalist design • Smooth fade transitions
-            </p>
-            <p className="text-gray-500 text-xs mt-2 text-center">
-              Edit: types/demo-content.ts
+            {/* Custom JSON Input */}
+            <div className="border-t border-gray-700 pt-4 mt-4">
+              <div className="flex items-center justify-between mb-3">
+                <label className="text-gray-300 text-sm font-medium">
+                  📄 Custom JSON
+                </label>
+                <button
+                  onClick={() => setUseCustomJson(!useCustomJson)}
+                  className={`px-3 py-1 rounded text-xs font-medium transition-all ${useCustomJson
+                    ? "bg-green-600 text-white"
+                    : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                    }`}
+                >
+                  {useCustomJson ? "✓ Using Custom" : "Use Demo"}
+                </button>
+              </div>
+
+              {/* Load Sample Button */}
+              <div className="flex gap-2 mb-2">
+                <button
+                  onClick={loadSampleJson}
+                  className="flex-1 bg-gray-700 text-gray-300 px-3 py-2 rounded-lg text-sm hover:bg-gray-600 transition-colors"
+                >
+                  📥 Load Sample JSON
+                </button>
+                {customJsonInput && (
+                  <button
+                    onClick={() => {
+                      setCustomJsonInput("");
+                      setUseCustomJson(false);
+                    }}
+                    className="bg-red-600/20 text-red-400 px-3 py-2 rounded-lg text-sm hover:bg-red-600/30 transition-colors"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+
+              {/* JSON Textarea */}
+              <textarea
+                value={customJsonInput}
+                onChange={(e) => setCustomJsonInput(e.target.value)}
+                placeholder='Paste your JSON here...
+
+{
+  "id": "my-video",
+  "title": "My Video",
+  "sections": [...]
+}'
+                className={`w-full h-32 bg-gray-900 text-gray-300 rounded-lg px-3 py-2 text-xs font-mono focus:outline-none focus:ring-2 resize-none ${jsonError
+                  ? "border border-red-500 focus:ring-red-500"
+                  : "border border-gray-700 focus:ring-blue-500"
+                  }`}
+              />
+
+              {/* Error Message */}
+              {jsonError && (
+                <p className="text-red-400 text-xs mt-1">
+                  ⚠️ JSON Error: {jsonError}
+                </p>
+              )}
+
+              {/* Success indicator - Enhanced */}
+              {parsedCustomContent && !jsonError && (
+                <div className={`mt-3 p-3 rounded-lg border ${useCustomJson
+                    ? "bg-green-600/20 border-green-500/50"
+                    : "bg-gray-700/50 border-gray-600"
+                  }`}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className={`text-sm font-medium ${useCustomJson ? "text-green-400" : "text-gray-300"}`}>
+                        {useCustomJson ? "✓ Using Custom JSON" : "📄 JSON Ready"}
+                      </p>
+                      <p className="text-xs text-gray-400 mt-1">
+                        "{parsedCustomContent.title || "Untitled"}" • {parsedCustomContent.sections?.length || 0} sections
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setUseCustomJson(!useCustomJson)}
+                      className={`px-3 py-1.5 rounded text-xs font-medium transition-all ${useCustomJson
+                          ? "bg-green-600 text-white hover:bg-green-700"
+                          : "bg-blue-600 text-white hover:bg-blue-700"
+                        }`}
+                    >
+                      {useCustomJson ? "✓ Active" : "Use This"}
+                    </button>
+                  </div>
+                  {useCustomJson && (
+                    <p className="text-green-300 text-xs mt-2 flex items-center gap-1">
+                      🎬 Video is now playing your custom JSON content
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <p className="text-gray-500 text-xs mt-4 text-center">
+              {useCustomJson && parsedCustomContent
+                ? `Custom: ${parsedCustomContent.title || "Untitled"}`
+                : "Using: AI Revolution Demo"
+              }
             </p>
           </div>
         )}

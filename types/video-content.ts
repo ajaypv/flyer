@@ -35,6 +35,7 @@ export const SectionType = z.enum([
     "stats",
     "comparison",
     "quote",
+    "code",
     "outro",
 ]);
 export type SectionTypeValue = z.infer<typeof SectionType>;
@@ -401,6 +402,7 @@ export const DEFAULT_SECTION_DURATIONS: Record<SectionTypeValue, number> = {
     stats: 4,
     comparison: 5,
     quote: 4,
+    code: 6,
     outro: 2,
 };
 

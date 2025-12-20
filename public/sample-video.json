@@ -1,0 +1,64 @@
+{
+    "id": "sample-explainer",
+    "title": "My Sample Video",
+    "type": "explainer",
+    "format": "portrait",
+    "background": "gradient-mesh",
+    "colorScheme": "dark",
+    "primaryColor": "#ffffff",
+    "accentColor": "#0a84ff",
+    "sections": [
+        {
+            "id": "intro",
+            "type": "intro",
+            "headline": "Hello World!",
+            "subheadline": "Your first video",
+            "duration": 3,
+            "textAnimation": "fade",
+            "textPosition": "center",
+            "textAlign": "center"
+        },
+        {
+            "id": "features",
+            "type": "bullet_list",
+            "headline": "Features",
+            "bullets": [
+                "Easy to use",
+                "Beautiful animations",
+                "Customizable"
+            ],
+            "duration": 4,
+            "textAnimation": "fade",
+            "textPosition": "center",
+            "textAlign": "center"
+        },
+        {
+            "id": "stats",
+            "type": "stats",
+            "stats": [
+                {
+                    "value": "100+",
+                    "label": "Videos Created"
+                },
+                {
+                    "value": "5min",
+                    "label": "Average Time"
+                }
+            ],
+            "duration": 4,
+            "textAnimation": "fade",
+            "textPosition": "center",
+            "textAlign": "center"
+        },
+        {
+            "id": "outro",
+            "type": "outro",
+            "headline": "Get Started",
+            "subheadline": "@yourhandle",
+            "duration": 3,
+            "textAnimation": "fade",
+            "textPosition": "center",
+            "textAlign": "center"
+        }
+    ]
+}

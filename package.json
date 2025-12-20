@@ -59,6 +59,7 @@
     "remotion": "remotion studio",
     "render": "remotion render",
     "render:conversation": "node scripts/render-conversation.mjs",
+    "render:explainer": "node scripts/render-explainer.mjs",
     "deploy": "node deploy.mjs"
   }
 }
