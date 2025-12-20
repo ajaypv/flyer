@@ -1,0 +1,73 @@
+{
+    "id": "skillsync-explainer",
+    "title": "Skillsync Deep Dive",
+    "type": "explainer",
+    "format": "landscape",
+    "background": "gradient-mesh",
+    "colorScheme": "dark",
+    "primaryColor": "#ff4d4d",
+    "accentColor": "#ffffff",
+    "sections": [
+        {
+            "id": "hook",
+            "type": "headline",
+            "headline": "Stop Hiring from Resumes",
+            "subheadline": "Open Source is the New Resume",
+            "body": "GitHub stars and commit counts are shallow metrics.",
+            "duration": 5,
+            "textAnimation": "fade",
+            "textPosition": "center",
+            "backgroundOverride": "solid-dark"
+        },
+        {
+            "id": "what-it-does",
+            "type": "headline",
+            "headline": "Analysis > Keyboards",
+            "subheadline": "Deep Code Understanding",
+            "body": "Skillsync analyzes actual shipped code to prove capability.",
+            "duration": 5,
+            "textAnimation": "fade",
+            "textPosition": "right",
+            "backgroundOverride": "aurora"
+        },
+        {
+            "id": "demo-search",
+            "type": "code",
+            "headline": "The \"Cursor\" for Recruiting",
+            "subheadline": "Natural Language Search",
+            "bullets": [
+                "// Instead of filtering by \"React\"...",
+                "> \"Find engineers who built custom",
+                "   neural nets on edge devices\"",
+                "",
+                "Analyzing semantic code patterns...",
+                "Found: 3 World-Class Engineers"
+            ],
+            "duration": 8,
+            "backgroundOverride": "organic-blobs"
+        },
+        {
+            "id": "why-its-cool",
+            "type": "bullet_list",
+            "headline": "Why I Love This",
+            "bullets": [
+                "Finds Hidden Talent",
+                "Based on Merit, Not Pedigree",
+                "Built by Rust Experts",
+                "No More Keyword Spam"
+            ],
+            "duration": 6,
+            "textAnimation": "fade",
+            "textPosition": "center",
+            "backgroundOverride": "gradient-mesh"
+        },
+        {
+            "id": "outro",
+            "type": "outro",
+            "headline": "Check out Skillsync",
+            "subheadline": "skillsync.wiki",
+            "duration": 4,
+            "textAnimation": "fade"
+        }
+    ]
+}

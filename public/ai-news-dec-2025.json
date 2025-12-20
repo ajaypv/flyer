@@ -1,0 +1,164 @@
+{
+    "id": "ai-news-dec-2025",
+    "title": "AI News: December 2025",
+    "type": "explainer",
+    "format": "landscape",
+    "background": "ice-galaxy",
+    "colorScheme": "dark",
+    "primaryColor": "#00f2ff",
+    "accentColor": "#0055ff",
+    "sections": [
+        {
+            "id": "intro",
+            "type": "intro",
+            "headline": "AI News Update\nDecember 2025",
+            "subheadline": "The Year Everything Changed",
+            "duration": 4,
+            "textAnimation": "fade",
+            "textPosition": "center",
+            "textAlign": "center"
+        },
+        {
+            "id": "openai-gpt5",
+            "type": "headline",
+            "headline": "OpenAI GPT-5.2",
+            "subheadline": "Released Dec 11 • 400k Context",
+            "body": "Response to Gemini 3. Includes Instant, Thinking, and Pro versions.",
+            "duration": 5,
+            "textAnimation": "fade",
+            "textPosition": "left",
+            "backgroundOverride": "aurora"
+        },
+        {
+            "id": "gpt5-stats",
+            "type": "stats",
+            "stats": [
+                {
+                    "value": "55.6%",
+                    "label": "SWE-Bench Pro"
+                },
+                {
+                    "value": "92.4%",
+                    "label": "GPQA Diamond"
+                },
+                {
+                    "value": "400k",
+                    "label": "Context Window"
+                }
+            ],
+            "duration": 5,
+            "backgroundOverride": "aurora"
+        },
+        {
+            "id": "gemini-3",
+            "type": "headline",
+            "headline": "Google Gemini 3",
+            "subheadline": "Deep Research Agent Released",
+            "body": "Autonomously plans and executes research. 66.1% on DeepSearchQA.",
+            "duration": 5,
+            "textAnimation": "fade",
+            "textPosition": "right",
+            "backgroundOverride": "hyperspeed"
+        },
+        {
+            "id": "mistral-devstral",
+            "type": "code",
+            "headline": "Mistral Devstral 2",
+            "subheadline": "Strongest Open-Weight Model (123B)",
+            "bullets": [
+                "const model = new Devstral({",
+                "  params: '123B',",
+                "  bench: '72.2% SWE-Verified'",
+                "});",
+                "// Mistral Vibe CLI included"
+            ],
+            "duration": 6,
+            "backgroundOverride": "organic-blobs"
+        },
+        {
+            "id": "funding-mega",
+            "type": "headline",
+            "headline": "Mega-Rounds",
+            "subheadline": "Record-Breaking Capital Flow",
+            "duration": 3,
+            "textAnimation": "fade",
+            "textPosition": "center",
+            "backgroundOverride": "3d-grid"
+        },
+        {
+            "id": "thinking-machines",
+            "type": "bullet_list",
+            "headline": "Thinking Machines",
+            "bullets": [
+                "Founded by Mira Murati",
+                "$2 Billion Seed Round",
+                "$12 Billion Valuation",
+                "Led by a16z"
+            ],
+            "duration": 5,
+            "textAnimation": "fade",
+            "textPosition": "left",
+            "backgroundOverride": "3d-grid"
+        },
+        {
+            "id": "unconventional-ai",
+            "type": "bullet_list",
+            "headline": "Unconventional AI",
+            "bullets": [
+                "Neuromorphic Computing",
+                "$475M Seed Round",
+                "$4.5B Valuation",
+                "Goal: 1000x Efficiency"
+            ],
+            "duration": 5,
+            "textAnimation": "fade",
+            "textPosition": "right",
+            "backgroundOverride": "3d-grid"
+        },
+        {
+            "id": "suno-metrics",
+            "type": "headline",
+            "headline": "Suno AI Series C",
+            "subheadline": "$250M Raised • $2.45B Val",
+            "body": "100 Million Users. $200M Annual Revenue.",
+            "duration": 4,
+            "textAnimation": "fade",
+            "textPosition": "bottom",
+            "backgroundOverride": "gradient-mesh"
+        },
+        {
+            "id": "product-hunt",
+            "type": "code",
+            "headline": "Trending Products",
+            "subheadline": "Top Launches Dec 2025",
+            "bullets": [
+                "1. ClickUp 4.0 (605)",
+                "2. Loki.Build (603)",
+                "3. CyberCut AI (591)",
+                "4. PlanEat AI (540)",
+                "5. Pylar (506)"
+            ],
+            "duration": 6,
+            "backgroundOverride": "solid-dark"
+        },
+        {
+            "id": "trends-energy",
+            "type": "headline",
+            "headline": "2025 Trends",
+            "subheadline": "Energy Efficiency is King",
+            "body": "Investors pivoting to hardware, neuromorphic chips, and AI infrastructure.",
+            "duration": 5,
+            "textAnimation": "fade",
+            "textPosition": "center",
+            "backgroundOverride": "shooting-stars"
+        },
+        {
+            "id": "outro",
+            "type": "outro",
+            "headline": "AI Update 2025",
+            "subheadline": "Subscribe for Weekly News",
+            "duration": 4,
+            "textAnimation": "fade"
+        }
+    ]
+}
