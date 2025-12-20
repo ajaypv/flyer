@@ -1,12 +1,13 @@
 import React from "react";
-import { useCurrentFrame, interpolate } from "remotion";
+import { useCurrentFrame, interpolate, useVideoConfig } from "remotion";
 import {
   MessageType,
   PlatformThemeType,
-  MSG_TYPING_DURATION_FRAMES,
-  MSG_DISPLAY_FRAMES,
-  MSG_TRANSITION_FRAMES,
-  MSG_INTRO_FRAMES,
+  MSG_TYPING_DURATION_SECONDS,
+  MSG_DISPLAY_SECONDS,
+  MSG_TRANSITION_SECONDS,
+  MSG_INTRO_SECONDS,
+  secondsToFrames,
 } from "../../../../types/constants";
 import { MessageRenderer } from "../MessageRenderer";
 import { TypingIndicator } from "../TypingIndicator";
@@ -35,7 +36,15 @@ export const PairedMode: React.FC<PairedModeProps> = ({
   zoomLevel = 1.0,
 }) => {
   const frame = useCurrentFrame();
-  const adjustedFrame = frame - MSG_INTRO_FRAMES;
+  const { fps } = useVideoConfig();
+  
+  // Convert seconds to frames based on actual FPS
+  const typingDurationFrames = secondsToFrames(MSG_TYPING_DURATION_SECONDS, fps);
+  const displayFrames = secondsToFrames(MSG_DISPLAY_SECONDS, fps);
+  const transitionFrames = secondsToFrames(MSG_TRANSITION_SECONDS, fps);
+  const introFrames = secondsToFrames(MSG_INTRO_SECONDS, fps);
+  
+  const adjustedFrame = frame - introFrames;
 
   // Group messages into pairs
   const pairs: MessageType[][] = [];
@@ -44,8 +53,7 @@ export const PairedMode: React.FC<PairedModeProps> = ({
   }
 
   // Time per pair: typing1 + typing2 + display + transition
-  const timePerPair =
-    2 * MSG_TYPING_DURATION_FRAMES + MSG_DISPLAY_FRAMES + MSG_TRANSITION_FRAMES;
+  const timePerPair = 2 * typingDurationFrames + displayFrames + transitionFrames;
 
   // Find current pair index
   const currentPairIndex = Math.floor(adjustedFrame / timePerPair);
@@ -64,21 +72,24 @@ export const PairedMode: React.FC<PairedModeProps> = ({
   // 2*TYPING_DURATION - 2*TYPING_DURATION + DISPLAY: Both messages displayed
   // After: Fade out
 
-  const firstTypingEnd = MSG_TYPING_DURATION_FRAMES;
-  const secondTypingEnd = 2 * MSG_TYPING_DURATION_FRAMES;
-  const displayEnd = secondTypingEnd + MSG_DISPLAY_FRAMES;
+  const firstTypingEnd = typingDurationFrames;
+  const secondTypingEnd = 2 * typingDurationFrames;
+  const displayEnd = secondTypingEnd + displayFrames;
 
   const isFirstTyping = frameInCurrentPair < firstTypingEnd;
   const isSecondTyping =
     secondMessage && frameInCurrentPair >= firstTypingEnd && frameInCurrentPair < secondTypingEnd;
   const isFading = frameInCurrentPair >= displayEnd;
 
+  // Animation duration (0.5 seconds)
+  const animationDuration = Math.round(fps * 0.5);
+
   // Calculate animation progress for messages
   const firstMessageProgress =
     frameInCurrentPair >= firstTypingEnd
       ? interpolate(
           frameInCurrentPair,
-          [firstTypingEnd, firstTypingEnd + 15],
+          [firstTypingEnd, firstTypingEnd + animationDuration],
           [0, 1],
           { extrapolateRight: "clamp" }
         )
@@ -88,7 +99,7 @@ export const PairedMode: React.FC<PairedModeProps> = ({
     secondMessage && frameInCurrentPair >= secondTypingEnd
       ? interpolate(
           frameInCurrentPair,
-          [secondTypingEnd, secondTypingEnd + 15],
+          [secondTypingEnd, secondTypingEnd + animationDuration],
           [0, 1],
           { extrapolateRight: "clamp" }
         )
@@ -98,7 +109,7 @@ export const PairedMode: React.FC<PairedModeProps> = ({
   const fadeOpacity = isFading
     ? interpolate(
         frameInCurrentPair,
-        [displayEnd, displayEnd + MSG_TRANSITION_FRAMES],
+        [displayEnd, displayEnd + transitionFrames],
         [1, 0],
         { extrapolateRight: "clamp" }
       )

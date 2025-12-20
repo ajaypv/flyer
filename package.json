@@ -58,6 +58,7 @@
     "lint": "eslint .",
     "remotion": "remotion studio",
     "render": "remotion render",
+    "render:conversation": "node scripts/render-conversation.mjs",
     "deploy": "node deploy.mjs"
   }
 }

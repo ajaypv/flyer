@@ -4,81 +4,88 @@ import {
   MessageType,
   PlatformThemeType,
   DisplayModeType,
-  MSG_TYPING_DURATION_FRAMES,
-  MSG_DISPLAY_FRAMES,
-  MSG_TRANSITION_FRAMES,
-  MSG_INTRO_FRAMES,
+  MSG_TYPING_DURATION_SECONDS,
+  MSG_DISPLAY_SECONDS,
+  MSG_TRANSITION_SECONDS,
+  MSG_INTRO_SECONDS,
+  secondsToFrames,
 } from "../../../types/constants";
 import { getThemeConfig, getScaleFactor } from "./themeConfig";
 import { AutoScrollMode } from "./modes/AutoScrollMode";
 import { OneAtATimeMode } from "./modes/OneAtATimeMode";
 import { PairedMode } from "./modes/PairedMode";
 
-interface MessageConversationProps {
-  senderName: string;
+export interface MessageConversationProps {
+  senderName?: string;
   senderAvatarUrl?: string;
   senderHandle?: string;
-  receiverName: string;
+  receiverName?: string;
   receiverAvatarUrl?: string;
   receiverHandle?: string;
-  messages: MessageType[];
-  platformTheme: PlatformThemeType;
-  displayMode: DisplayModeType;
+  messages?: MessageType[];
+  platformTheme?: PlatformThemeType;
+  displayMode?: DisplayModeType;
   zoomLevel?: number; // User-adjustable zoom (0.5 to 2.0, default 1.0)
 }
 
 export const MessageConversation: React.FC<MessageConversationProps> = ({
-  senderName,
+  senderName = "Sender",
   senderAvatarUrl,
-  senderHandle,
-  receiverName,
+  senderHandle = "@user",
+  receiverName = "Receiver",
   receiverAvatarUrl,
-  receiverHandle,
-  messages,
-  platformTheme,
-  displayMode,
+  receiverHandle = "@user",
+  messages = [],
+  platformTheme = "imessage",
+  displayMode = "auto-scroll",
   zoomLevel = 1.0,
 }) => {
-  const { width, height } = useVideoConfig();
+  const { width, height, fps } = useVideoConfig();
   const theme = getThemeConfig(platformTheme);
   const baseScale = getScaleFactor(width, height);
   const scale = baseScale * zoomLevel; // Apply user zoom level
+
+  // Convert seconds to frames based on actual FPS
+  const typingDurationFrames = secondsToFrames(MSG_TYPING_DURATION_SECONDS, fps);
+  const displayFrames = secondsToFrames(MSG_DISPLAY_SECONDS, fps);
+  const transitionFrames = secondsToFrames(MSG_TRANSITION_SECONDS, fps);
+  const introFrames = secondsToFrames(MSG_INTRO_SECONDS, fps);
 
   // Calculate sound timing based on display mode
   const getSoundSequences = () => {
     const sequences: { typingStart: number; messageStart: number }[] = [];
 
     if (displayMode === "auto-scroll") {
-      const timePerMessage = MSG_TYPING_DURATION_FRAMES + MSG_DISPLAY_FRAMES;
+      const timePerMessage = typingDurationFrames + displayFrames;
       messages.forEach((_, index) => {
         sequences.push({
-          typingStart: MSG_INTRO_FRAMES + index * timePerMessage,
-          messageStart: MSG_INTRO_FRAMES + index * timePerMessage + MSG_TYPING_DURATION_FRAMES,
+          typingStart: introFrames + index * timePerMessage,
+          messageStart: introFrames + index * timePerMessage + typingDurationFrames,
         });
       });
     } else if (displayMode === "one-at-a-time") {
-      const timePerMessage = MSG_TYPING_DURATION_FRAMES + MSG_DISPLAY_FRAMES + MSG_TRANSITION_FRAMES;
+      const timePerMessage = typingDurationFrames + displayFrames + transitionFrames;
       messages.forEach((_, index) => {
         sequences.push({
-          typingStart: MSG_INTRO_FRAMES + index * timePerMessage,
-          messageStart: MSG_INTRO_FRAMES + index * timePerMessage + MSG_TYPING_DURATION_FRAMES,
+          typingStart: introFrames + index * timePerMessage,
+          messageStart: introFrames + index * timePerMessage + typingDurationFrames,
         });
       });
     } else if (displayMode === "paired") {
-      const timePerPair = 2 * MSG_TYPING_DURATION_FRAMES + MSG_DISPLAY_FRAMES + MSG_TRANSITION_FRAMES;
+      const timePerPair = 2 * typingDurationFrames + displayFrames + transitionFrames;
       const pairCount = Math.ceil(messages.length / 2);
       for (let i = 0; i < pairCount; i++) {
-        const pairStart = MSG_INTRO_FRAMES + i * timePerPair;
+        const pairStart = introFrames + i * timePerPair;
         // First message in pair
         sequences.push({
           typingStart: pairStart,
-          messageStart: pairStart + MSG_TYPING_DURATION_FRAMES,
+          messageStart: pairStart + typingDurationFrames,
         });
         // Second message in pair (if exists)
         if (i * 2 + 1 < messages.length) {
           sequences.push({
-            typingStart: pairStart + MSG_TYPING_DURATION_FRAMES,
-            messageStart: pairStart + 2 * MSG_TYPING_DURATION_FRAMES,
+            typingStart: pairStart + typingDurationFrames,
+            messageStart: pairStart + 2 * typingDurationFrames,
           });
         }
       }
@@ -126,7 +133,7 @@ export const MessageConversation: React.FC<MessageConversationProps> = ({
         <React.Fragment key={index}>
           {/* Typing sound - plays during typing indicator (not for Twitter) */}
           {platformTheme !== "twitter" && (
-            <Sequence from={seq.typingStart} durationInFrames={MSG_TYPING_DURATION_FRAMES}>
+            <Sequence from={seq.typingStart} durationInFrames={typingDurationFrames}>
               <Audio
                 src={staticFile("sound/keyboard-typing-sound-effect-335503.mp3")}
                 volume={0.3}
@@ -134,7 +141,7 @@ export const MessageConversation: React.FC<MessageConversationProps> = ({
             </Sequence>
           )}
           {/* Message sent sound - different per platform */}
-          <Sequence from={seq.messageStart} durationInFrames={30}>
+          <Sequence from={seq.messageStart} durationInFrames={fps}>
             <Audio
               src={staticFile(
                 platformTheme === "twitter"

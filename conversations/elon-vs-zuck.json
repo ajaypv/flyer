@@ -1,0 +1,23 @@
+{
+  "senderName": "Elon Musk",
+  "senderAvatarUrl": "https://pbs.twimg.com/profile_images/1893803697185910784/Na5lOWi5_400x400.jpg",
+  "senderHandle": "@elonmusk",
+  "receiverName": "Mark Zuckerberg",
+  "receiverAvatarUrl": "https://m.media-amazon.com/images/I/71i7tAkzrTS._AC_UF894,1000_QL80_.jpg",
+  "receiverHandle": "@faborig",
+  "platformTheme": "twitter",
+  "displayMode": "auto-scroll",
+  "zoomLevel": 1.0,
+  "messages": [
+    { "id": "1", "text": "Hey Zuck, still up for that cage fight? 🥊", "sender": "sender" },
+    { "id": "2", "text": "Lol you're still talking about that? I've been training MMA for years", "sender": "receiver" },
+    { "id": "3", "text": "I've been training too... on Twitter. My thumbs are LETHAL 👊", "sender": "sender" },
+    { "id": "4", "text": "That explains why X is such a mess 😂", "sender": "receiver" },
+    { "id": "5", "text": "At least my platform doesn't steal everyone's data... oh wait 👀", "sender": "sender" },
+    { "id": "6", "text": "Says the guy who named his kid X Æ A-12. Even my AI couldn't decode that", "sender": "receiver" },
+    { "id": "7", "text": "My kid will colonize Mars. Yours will be stuck in the Metaverse with 12 users", "sender": "sender" },
+    { "id": "8", "text": "12 users is generous. Have you SEEN your Cybertruck windows? 🪟💥", "sender": "receiver" },
+    { "id": "9", "text": "Those windows are BULLETPROOF... mostly. Unlike your hairline recovery 💇", "sender": "sender" },
+    { "id": "10", "text": "Bro you literally bought a bird app for $44B. I'm not taking financial advice from you 🐦", "sender": "receiver" }
+  ]
+}

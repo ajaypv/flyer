@@ -1,12 +1,13 @@
 import React from "react";
-import { useCurrentFrame, interpolate } from "remotion";
+import { useCurrentFrame, interpolate, useVideoConfig } from "remotion";
 import {
   MessageType,
   PlatformThemeType,
-  MSG_TYPING_DURATION_FRAMES,
-  MSG_DISPLAY_FRAMES,
-  MSG_TRANSITION_FRAMES,
-  MSG_INTRO_FRAMES,
+  MSG_TYPING_DURATION_SECONDS,
+  MSG_DISPLAY_SECONDS,
+  MSG_TRANSITION_SECONDS,
+  MSG_INTRO_SECONDS,
+  secondsToFrames,
 } from "../../../../types/constants";
 import { MessageRenderer } from "../MessageRenderer";
 import { TypingIndicator } from "../TypingIndicator";
@@ -35,10 +36,16 @@ export const OneAtATimeMode: React.FC<OneAtATimeModeProps> = ({
   zoomLevel = 1.0,
 }) => {
   const frame = useCurrentFrame();
-  const adjustedFrame = frame - MSG_INTRO_FRAMES;
-
-  const messageTimePerMessage =
-    MSG_TYPING_DURATION_FRAMES + MSG_DISPLAY_FRAMES + MSG_TRANSITION_FRAMES;
+  const { fps } = useVideoConfig();
+  
+  // Convert seconds to frames based on actual FPS
+  const typingDurationFrames = secondsToFrames(MSG_TYPING_DURATION_SECONDS, fps);
+  const displayFrames = secondsToFrames(MSG_DISPLAY_SECONDS, fps);
+  const transitionFrames = secondsToFrames(MSG_TRANSITION_SECONDS, fps);
+  const introFrames = secondsToFrames(MSG_INTRO_SECONDS, fps);
+  
+  const adjustedFrame = frame - introFrames;
+  const messageTimePerMessage = typingDurationFrames + displayFrames + transitionFrames;
 
   // Find current message index
   const currentMessageIndex = Math.floor(adjustedFrame / messageTimePerMessage);
@@ -49,16 +56,16 @@ export const OneAtATimeMode: React.FC<OneAtATimeModeProps> = ({
   }
 
   const currentMessage = messages[currentMessageIndex];
-  const isTyping = frameInCurrentMessage < MSG_TYPING_DURATION_FRAMES;
-  const isFading =
-    frameInCurrentMessage >= MSG_TYPING_DURATION_FRAMES + MSG_DISPLAY_FRAMES;
+  const isTyping = frameInCurrentMessage < typingDurationFrames;
+  const isFading = frameInCurrentMessage >= typingDurationFrames + displayFrames;
 
   // Calculate animation progress
+  const animationDuration = Math.round(fps * 0.5); // 0.5 seconds
   const messageProgress = isTyping
     ? 0
     : interpolate(
         frameInCurrentMessage,
-        [MSG_TYPING_DURATION_FRAMES, MSG_TYPING_DURATION_FRAMES + 15],
+        [typingDurationFrames, typingDurationFrames + animationDuration],
         [0, 1],
         { extrapolateRight: "clamp" }
       );
@@ -67,10 +74,7 @@ export const OneAtATimeMode: React.FC<OneAtATimeModeProps> = ({
   const fadeOpacity = isFading
     ? interpolate(
         frameInCurrentMessage,
-        [
-          MSG_TYPING_DURATION_FRAMES + MSG_DISPLAY_FRAMES,
-          MSG_TYPING_DURATION_FRAMES + MSG_DISPLAY_FRAMES + MSG_TRANSITION_FRAMES,
-        ],
+        [typingDurationFrames + displayFrames, typingDurationFrames + displayFrames + transitionFrames],
         [1, 0],
         { extrapolateRight: "clamp" }
       )

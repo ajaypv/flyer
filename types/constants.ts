@@ -137,12 +137,24 @@ export const CHARS_PER_SECOND = 10; // Characters typed per second
 export const INTRO_FRAMES = 30; // Frames before text starts
 export const OUTRO_FRAMES = 90; // Frames after text completes (3 seconds at 30fps)
 
-// Message conversation timing constants
+// Message conversation timing in SECONDS (FPS-independent)
+export const MSG_TYPING_DURATION_SECONDS = 1.5;
+export const MSG_DISPLAY_SECONDS = 2;
+export const MSG_TRANSITION_SECONDS = 0.5;
+export const MSG_INTRO_SECONDS = 1;
+export const MSG_OUTRO_SECONDS = 2;
+
+// Message conversation timing constants at 30fps (for backward compatibility)
 export const MSG_TYPING_DURATION_FRAMES = 45; // 1.5 seconds at 30fps
 export const MSG_DISPLAY_FRAMES = 60; // 2 seconds at 30fps
 export const MSG_TRANSITION_FRAMES = 15; // 0.5 seconds at 30fps
 export const MSG_INTRO_FRAMES = 30; // 1 second intro
 export const MSG_OUTRO_FRAMES = 60; // 2 seconds outro
+
+// Helper to convert seconds to frames at given FPS
+export const secondsToFrames = (seconds: number, fps: number = VIDEO_FPS): number => {
+  return Math.round(seconds * fps);
+};
 
 // Calculate duration based on text and animation type (for text mode)
 export const calculateDuration = (
@@ -160,42 +172,50 @@ export const calculateDuration = (
 };
 
 // Calculate duration for message conversation mode
+// Supports dynamic FPS (30 or 60)
 export const calculateMessageDuration = (
   messageCount: number,
-  displayMode: DisplayModeType
+  displayMode: DisplayModeType,
+  fps: number = VIDEO_FPS
 ): number => {
+  const typingFrames = secondsToFrames(MSG_TYPING_DURATION_SECONDS, fps);
+  const displayFrames = secondsToFrames(MSG_DISPLAY_SECONDS, fps);
+  const transitionFrames = secondsToFrames(MSG_TRANSITION_SECONDS, fps);
+  const introFrames = secondsToFrames(MSG_INTRO_SECONDS, fps);
+  const outroFrames = secondsToFrames(MSG_OUTRO_SECONDS, fps);
+
   if (messageCount === 0) {
-    return MSG_INTRO_FRAMES + MSG_OUTRO_FRAMES;
+    return introFrames + outroFrames;
   }
 
   switch (displayMode) {
     case "auto-scroll":
       // Auto-scroll: intro + (messages * (typing + display)) + outro
       return (
-        MSG_INTRO_FRAMES +
-        messageCount * (MSG_TYPING_DURATION_FRAMES + MSG_DISPLAY_FRAMES) +
-        MSG_OUTRO_FRAMES
+        introFrames +
+        messageCount * (typingFrames + displayFrames) +
+        outroFrames
       );
 
     case "one-at-a-time":
       // One-at-a-time: intro + (messages * (typing + display + transition)) + outro
       return (
-        MSG_INTRO_FRAMES +
-        messageCount * (MSG_TYPING_DURATION_FRAMES + MSG_DISPLAY_FRAMES + MSG_TRANSITION_FRAMES) +
-        MSG_OUTRO_FRAMES
+        introFrames +
+        messageCount * (typingFrames + displayFrames + transitionFrames) +
+        outroFrames
       );
 
     case "paired":
       // Paired: intro + (pairs * (2 * typing + display + transition)) + outro
       const pairCount = Math.ceil(messageCount / 2);
       return (
-        MSG_INTRO_FRAMES +
-        pairCount * (2 * MSG_TYPING_DURATION_FRAMES + MSG_DISPLAY_FRAMES + MSG_TRANSITION_FRAMES) +
-        MSG_OUTRO_FRAMES
+        introFrames +
+        pairCount * (2 * typingFrames + displayFrames + transitionFrames) +
+        outroFrames
       );
 
     default:
-      return MSG_INTRO_FRAMES + MSG_OUTRO_FRAMES;
+      return introFrames + outroFrames;
   }
 };
 
