@@ -1,0 +1,73 @@
+{
+    "senderName": "Naruto Uzumaki",
+    "senderAvatarUrl": "https://i.pinimg.com/736x/d0/c8/3f/d0c83f3c1c9de5c38d3e25d4f1c3c38f.jpg",
+    "senderHandle": "@naruto_hokage",
+    "receiverName": "Dots AI",
+    "receiverAvatarUrl": "https://opendots.in/favicon.ico",
+    "receiverHandle": "@dots_ai",
+    "platformTheme": "discord",
+    "displayMode": "auto-scroll",
+    "zoomLevel": 1.0,
+    "messages": [
+        {
+            "id": "1",
+            "text": "DATTEBAYO! What's this OpenDots thing? 🍥",
+            "sender": "sender"
+        },
+        {
+            "id": "2",
+            "text": "I'm Dots AI — your AI companion to find people who share your ninja way! 🥷",
+            "sender": "receiver"
+        },
+        {
+            "id": "3",
+            "text": "Can you help me find training partners? I need to become Hokage! 💪",
+            "sender": "sender"
+        },
+        {
+            "id": "4",
+            "text": "Absolutely! I analyze your goals, skills, and daily routine to find perfect matches 🎯",
+            "sender": "receiver"
+        },
+        {
+            "id": "5",
+            "text": "So like... finding comrades for missions? That's so cool! 🔥",
+            "sender": "sender"
+        },
+        {
+            "id": "6",
+            "text": "Exactly! Whether it's gym buddies, co-founders, or even a ramen eating contest partner 🍜",
+            "sender": "receiver"
+        },
+        {
+            "id": "7",
+            "text": "RAMEN?! Now you're speaking my language! 😍",
+            "sender": "sender"
+        },
+        {
+            "id": "8",
+            "text": "Haha! I also understand your language, location, and vibe to match you perfectly ✨",
+            "sender": "receiver"
+        },
+        {
+            "id": "9",
+            "text": "But what about creepy stalker ninjas? 👀",
+            "sender": "sender"
+        },
+        {
+            "id": "10",
+            "text": "Privacy is my Nindo! YOUR data stays YOURS. You control everything 🔒",
+            "sender": "receiver"
+        },
+        {
+            "id": "11",
+            "text": "Believe it! This is way better than shadow clones for making friends! 🙌",
+            "sender": "sender"
+        },
+        {
+            "id": "12",
+            "text": "Join the AI Network at opendots.in — your tribe is waiting, future Hokage! 🚀",
+            "sender": "receiver"
+        }
+    ]
+}

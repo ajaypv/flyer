@@ -1,0 +1,73 @@
+{
+    "senderName": "Open User",
+    "senderAvatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=OpenUser&backgroundColor=b6e3f4",
+    "senderHandle": "@curious_user",
+    "receiverName": "Dots AI",
+    "receiverAvatarUrl": "https://opendots.in/favicon.ico",
+    "receiverHandle": "@dots_ai",
+    "platformTheme": "discord",
+    "displayMode": "auto-scroll",
+    "zoomLevel": 1.0,
+    "messages": [
+        {
+            "id": "1",
+            "text": "Hey! What exactly is OpenDots? 🤔",
+            "sender": "sender"
+        },
+        {
+            "id": "2",
+            "text": "I'm your AI companion that helps you connect with the RIGHT people — not just random profiles 🎯",
+            "sender": "receiver"
+        },
+        {
+            "id": "3",
+            "text": "So like... a dating app? 😅",
+            "sender": "sender"
+        },
+        {
+            "id": "4",
+            "text": "Wayy more! Find flatmates, co-founders, gym buddies, mentors... basically anyone who matches your vibe 🔥",
+            "sender": "receiver"
+        },
+        {
+            "id": "5",
+            "text": "Okay but HOW do you know who's right for me?",
+            "sender": "sender"
+        },
+        {
+            "id": "6",
+            "text": "I learn your goals, interests, and even your daily patterns. Then I talk to other Dots to find perfect matches 🧠",
+            "sender": "receiver"
+        },
+        {
+            "id": "7",
+            "text": "Wait... Dots talk to each other?! 🤯",
+            "sender": "sender"
+        },
+        {
+            "id": "8",
+            "text": "Yep! Like AI dating for your social life. When two Dots agree, we introduce you both 🤝",
+            "sender": "receiver"
+        },
+        {
+            "id": "9",
+            "text": "What about my privacy though? 👀",
+            "sender": "sender"
+        },
+        {
+            "id": "10",
+            "text": "YOU control what I know and share. Your data stays yours. Always. 🔒",
+            "sender": "receiver"
+        },
+        {
+            "id": "11",
+            "text": "This sounds too good to be real... 😳",
+            "sender": "sender"
+        },
+        {
+            "id": "12",
+            "text": "Try it at opendots.in — your next meaningful connection is waiting ✨",
+            "sender": "receiver"
+        }
+    ]
+}
