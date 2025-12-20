@@ -13,7 +13,23 @@ import {
   calculateMessageDuration,
   DisplayModeType,
 } from "../../types/constants";
+import {
+  VIDEO_FORMAT_DIMENSIONS,
+  VIDEO_CONTENT_FPS,
+  calculateTotalFrames,
+} from "../../types/video-content";
+import { DAILY_AI_NEWS_TEMPLATE } from "../../types/presets";
+import { DEMO_LLM_EXPLAINER } from "../../types/demo-content";
 import { NextLogo } from "./MyComp/NextLogo";
+import { ContentExplainer, ContentExplainerProps } from "./ContentExplainer";
+
+// Content Explainer composition name
+export const CONTENT_EXPLAINER_COMP_NAME = "ContentExplainer";
+
+// Default props for ContentExplainer - using demo content for preview
+const defaultContentExplainerProps: ContentExplainerProps = {
+  content: DEMO_LLM_EXPLAINER,
+};
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -41,6 +57,31 @@ export const RemotionRoot: React.FC = () => {
           const durationInFrames = calculateMessageDuration(messageCount, displayMode);
           return {
             durationInFrames,
+          };
+        }}
+      />
+      {/* Content Explainer - Dynamic video content */}
+      <Composition
+        id={CONTENT_EXPLAINER_COMP_NAME}
+        component={ContentExplainer}
+        fps={VIDEO_CONTENT_FPS}
+        width={VIDEO_FORMAT_DIMENSIONS.portrait.width}
+        height={VIDEO_FORMAT_DIMENSIONS.portrait.height}
+        defaultProps={defaultContentExplainerProps}
+        calculateMetadata={({ props }) => {
+          const typedProps = props as ContentExplainerProps;
+          const content = typedProps.content || DAILY_AI_NEWS_TEMPLATE;
+          // Get format dimensions
+          const format = content.format || "portrait";
+          const { width, height } = VIDEO_FORMAT_DIMENSIONS[format];
+
+          // Calculate total duration from sections
+          const durationInFrames = calculateTotalFrames(content.sections);
+
+          return {
+            durationInFrames: Math.max(durationInFrames, 60), // Minimum 2 seconds
+            width,
+            height,
           };
         }}
       />
