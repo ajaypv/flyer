@@ -155,6 +155,7 @@ export default function ConversationEditorPage() {
       videoPreview={videoPreview}
       videoInfo={{ width, height, duration: estimatedDuration, fps: VIDEO_FPS }}
       durationInFrames={durationInFrames}
+      templateType="conversation"
     >
       {/* Import */}
       <EditorSection title="Import" defaultOpen={false}>

@@ -3,8 +3,7 @@
 import { useRouter } from "next/navigation";
 import React, { useState, useCallback, createContext, useContext, useRef } from "react";
 import { PlayerRef } from "@remotion/player";
-import { useVideoExport } from "@/hooks/useVideoExport";
-import { ExportDialog } from "./ExportDialog";
+import { DownloadComingSoonDialog } from "./DownloadComingSoonDialog";
 
 // Context to share player ref between EditorLayout and VideoPlayer
 interface PlayerContextType {
@@ -29,6 +28,7 @@ interface EditorLayoutProps {
     fps: number;
   };
   durationInFrames?: number;
+  templateType?: "conversation" | "explainer" | "text";
 }
 
 export function EditorLayout({
@@ -37,46 +37,19 @@ export function EditorLayout({
   children,
   videoPreview,
   videoInfo,
-  durationInFrames,
+  templateType = "conversation",
 }: EditorLayoutProps) {
   const router = useRouter();
   const playerRefHolder = useRef<PlayerRef | null>(null);
-  const [showExportDialog, setShowExportDialog] = useState(false);
-
-  // Video export hook
-  const {
-    state: exportState,
-    startExport,
-    cancelExport,
-    downloadVideo,
-    reset: resetExport,
-    isExporting,
-    progress,
-  } = useVideoExport({
-    fps: videoInfo?.fps || 30,
-    width: videoInfo?.width || 1080,
-    height: videoInfo?.height || 1920,
-    durationInFrames: durationInFrames || (videoInfo?.duration || 10) * (videoInfo?.fps || 30),
-    filename: `flyer-${title.toLowerCase().replace(/\s+/g, "-")}`,
-  });
+  const [showDownloadDialog, setShowDownloadDialog] = useState(false);
 
   const setPlayerRef = useCallback((ref: PlayerRef | null) => {
     playerRefHolder.current = ref;
   }, []);
 
-  const handleExport = useCallback(() => {
-    setShowExportDialog(true);
-    startExport(playerRefHolder.current);
-  }, [startExport]);
-
-  const handleCloseDialog = useCallback(() => {
-    setShowExportDialog(false);
-    resetExport();
-  }, [resetExport]);
-
-  const handleDownload = useCallback(() => {
-    downloadVideo();
-  }, [downloadVideo]);
+  const handleDownloadClick = useCallback(() => {
+    setShowDownloadDialog(true);
+  }, []);
 
   return (
     <PlayerContext.Provider value={{ setPlayerRef }}>
@@ -127,41 +100,18 @@ export function EditorLayout({
 
           {/* Right - Actions */}
           <div className="flex items-center gap-2">
-            {/* Export Button */}
+            {/* Download Button */}
             <button
-              onClick={handleExport}
-              disabled={isExporting}
-              className="h-8 px-4 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600 rounded-lg text-xs font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              onClick={handleDownloadClick}
+              className="h-8 px-4 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600 rounded-lg text-xs font-medium transition-all flex items-center gap-2"
             >
-              {isExporting ? (
-                <>
-                  <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
-                  <span>{Math.round(progress * 100)}%</span>
-                </>
-              ) : (
-                <>
-                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                  </svg>
-                  <span>Download</span>
-                </>
-              )}
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <span>Download</span>
             </button>
           </div>
         </header>
-
-        {/* Progress Bar (when exporting) */}
-        {isExporting && (
-          <div className="h-0.5 bg-white/5 flex-shrink-0">
-            <div
-              className="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all duration-300"
-              style={{ width: `${progress * 100}%` }}
-            />
-          </div>
-        )}
 
         {/* Main Content */}
         <div className="flex-1 flex overflow-hidden">
@@ -200,14 +150,11 @@ export function EditorLayout({
           </main>
         </div>
 
-        {/* Export Dialog */}
-        <ExportDialog
-          isOpen={showExportDialog}
-          state={exportState}
-          onClose={handleCloseDialog}
-          onDownload={handleDownload}
-          onCancel={cancelExport}
-          videoInfo={videoInfo}
+        {/* Download Coming Soon Dialog */}
+        <DownloadComingSoonDialog
+          isOpen={showDownloadDialog}
+          onClose={() => setShowDownloadDialog(false)}
+          templateType={templateType}
         />
       </div>
     </PlayerContext.Provider>

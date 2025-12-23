@@ -12,3 +12,4 @@ export {
 export { JsonImporter } from "./JsonImporter";
 export { ExportDialog } from "./ExportDialog";
 export { VideoPlayer } from "./VideoPlayer";
+export { DownloadComingSoonDialog } from "./DownloadComingSoonDialog";

@@ -114,6 +114,7 @@ export default function ExplainerEditorPage() {
       videoPreview={videoPreview}
       videoInfo={{ width, height, duration: estimatedDuration, fps: VIDEO_CONTENT_FPS }}
       durationInFrames={durationInFrames}
+      templateType="explainer"
     >
       {/* Content Source */}
       <EditorSection title="Content">

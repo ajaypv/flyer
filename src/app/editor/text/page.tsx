@@ -89,6 +89,7 @@ export default function TextEditorPage() {
       videoPreview={videoPreview}
       videoInfo={{ width, height, duration: estimatedDuration, fps: VIDEO_FPS }}
       durationInFrames={durationInFrames}
+      templateType="text"
     >
       {/* Text Content */}
       <EditorSection title="Text">
