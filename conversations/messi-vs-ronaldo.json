@@ -1,0 +1,19 @@
+{
+  "senderName": "Lionel Messi",
+  "senderHandle": "@leomessi",
+  "senderAvatarUrl": "https://ichef.bbci.co.uk/ace/standard/1024/cpsprodpb/b7b3/live/66207fb0-bfbf-11f0-8db2-d92fbd46f955.jpg",
+  "receiverName": "Cristiano Ronaldo",
+  "receiverHandle": "@cristiano",
+  "receiverAvatarUrl": "https://media-cldnry.s-nbcnews.com/image/upload/t_fit-560w,f_auto,q_auto:best/rockcms/2024-08/240822-Cristiano-Ronaldo-ch-1324-5a0450.jpg",
+  "platformTheme": "twitter",
+  "displayMode": "auto-scroll",
+  "zoomLevel": 1.0,
+  "messages": [
+    { "id": "1", "text": "Hey Cristiano, still counting goals or trophies now? 🏆😉", "sender": "sender" },
+    { "id": "2", "text": "Both. Legends do multitasking 😎", "sender": "receiver" },
+    { "id": "3", "text": "Fair. I just let the World Cup do the talking 🇦🇷✨", "sender": "sender" },
+    { "id": "4", "text": "Congrats. I let consistency over 20 years speak 📈", "sender": "receiver" },
+    { "id": "5", "text": "Fans argue more than we do 😂", "sender": "sender" },
+    { "id": "6", "text": "True. Without us, Twitter would be unemployed", "sender": "receiver" }
+  ]
+}
